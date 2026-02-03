@@ -11,8 +11,11 @@ android {
         applicationId = "com.techspace.shortvideo"
         minSdk = 24
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.0.2"
+        versionCode = 4
+        versionName = "1.0.3"
+
+        // APK文件名包含版本号
+        setProperty("archivesBaseName", "techspace-v${versionName}")
 
         // API Configuration
         buildConfigField("String", "API_BASE_URL", "\"https://api.91huohu.com/\"")
