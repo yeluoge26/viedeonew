@@ -1,0 +1,48 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:U('label/index')}">列表</a></li>
+			<li class="active"><a >添加</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('label/add_post')}">
+			<fieldset>
+                <input type="hidden" name="type" value="{$type}">
+
+                <div class="control-group">
+					<label class="control-label">名称</label>
+					<div class="controls">
+						<input type="text" name="name" value="" maxlength="6">最多6个字
+						<span class="form-required"></span>
+					</div>
+				</div>
+                <div class="control-group">
+					<label class="control-label">封面</label>
+					<div class="controls">
+                        <input type="hidden" name="thumb" id="thumb2" value="">
+                        <a href="javascript:void(0);" onclick="flashupload('thumb_images', '附件上传','thumb2',thumb_images,'1,jpg|jpeg|gif|png,1,,,1','','','');return false;">
+                                <img src="__TMPL__Public/assets/images/default-thumbnail.png" id="thumb2_preview" width="135" style="cursor: hand" />
+                        </a>
+                        <input type="button" class="btn btn-small" onclick="$('#thumb2_preview').attr('src','__TMPL__Public/assets/images/default-thumbnail.png');$('#thumb2').val('');return false;" value="取消图片">
+						<span class="form-required"></span> 建议尺寸：180 X 180 
+					</div>
+				</div>
+                <div class="control-group">
+					<label class="control-label">描述</label>
+					<div class="controls">
+						<input type="text" name="des" value="" style="width:500px;" maxlength="50">最多50字
+						<span class="form-required"></span>
+					</div>
+				</div>
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('ADD')}</button>
+				<a class="btn" href="{:U('label/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+    <script type="text/javascript" src="__PUBLIC__/js/content_addtop.js"></script>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <!-- 安全头 -->
+    <meta http-equiv="X-Frame-Options" content="DENY">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' https: data:; connect-src 'self' https:; frame-ancestors 'none';">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+    <meta name="referrer" content="strict-origin-when-cross-origin">
+    <title>登录 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page page-full">
+        <!-- 返回按钮 -->
+        <div class="header" style="background: transparent;">
+            <div class="header-btn" onclick="history.back()">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </div>
+        </div>
+
+        <div class="login-page">
+            <h1 class="login-title">登录TECHSPACE短视频</h1>
+
+            <div class="input-group">
+                <label>手机号</label>
+                <div class="input-row" style="position: relative;">
+                    <span style="position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: #fff;">+86</span>
+                    <input type="tel" id="phone" placeholder="请输入手机号" maxlength="11" style="padding-left: 60px;">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>验证码</label>
+                <div class="input-row">
+                    <input type="text" id="code" placeholder="默认验证码：123456" maxlength="6" value="123456">
+                    <button class="code-btn" id="codeBtn" onclick="sendCode()" style="opacity: 0.6;">获取验证码</button>
+                </div>
+                <p style="font-size: 12px; color: #666; margin-top: 8px;">测试验证码：123456</p>
+            </div>
+
+            <button class="login-btn" onclick="doLogin()">登录</button>
+
+            <p style="text-align: center; font-size: 12px; color: #666; margin-top: 40px; line-height: 1.6;">
+                登录即代表同意
+                <a href="#" style="color: var(--primary-color);">《用户协议》</a>
+                和
+                <a href="#" style="color: var(--primary-color);">《隐私政策》</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        let countdown = 0;
+        let codeBtn = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            codeBtn = document.getElementById('codeBtn');
+            // 检查是否已登录
+            if (localStorage.getItem('token')) {
+                location.href = 'me.html';
+            }
+        });
+
+        // 发送验证码
+        function sendCode() {
+            const phone = document.getElementById('phone').value.trim();
+
+            if (!phone || phone.length !== 11) {
+                alert('请输入正确的手机号');
+                return;
+            }
+
+            if (countdown > 0) return;
+
+            codeBtn.disabled = true;
+            codeBtn.textContent = '发送中...';
+
+            // 调用真实API发送验证码
+            API.sendCode(phone)
+                .then(function(data) {
+                    alert('验证码已发送，请查看手机短信');
+                    startCountdown();
+                })
+                .catch(function(err) {
+                    // API失败时提供fallback
+                    console.log('验证码API错误:', err);
+                    alert('验证码发送失败，测试环境请使用: 123456');
+                    codeBtn.disabled = false;
+                    codeBtn.textContent = '获取验证码';
+                });
+        }
+
+        // 倒计时
+        function startCountdown() {
+            countdown = 60;
+            codeBtn.disabled = true;
+
+            const timer = setInterval(function() {
+                countdown--;
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    codeBtn.disabled = false;
+                    codeBtn.textContent = '获取验证码';
+                    codeBtn.style.opacity = '1';
+                } else {
+                    codeBtn.textContent = countdown + 's后重发';
+                }
+            }, 1000);
+        }
+
+        // 登录
+        function doLogin() {
+            const phone = document.getElementById('phone').value.trim();
+            const code = document.getElementById('code').value.trim();
+
+            if (!phone || phone.length !== 11) {
+                alert('请输入正确的手机号');
+                return;
+            }
+
+            if (!code || code.length < 4) {
+                alert('请输入验证码');
+                return;
+            }
+
+            const loginBtn = document.querySelector('.login-btn');
+            loginBtn.disabled = true;
+            loginBtn.textContent = '登录中...';
+
+            // 调用真实API登录
+            API.login(phone, code)
+                .then(function(data) {
+                    // 登录成功，保存用户信息
+                    localStorage.setItem('token', data.token || data.id);
+                    localStorage.setItem('uid', data.id);
+                    localStorage.setItem('userInfo', JSON.stringify({
+                        id: data.id,
+                        nickname: data.user_nicename || data.nickname || '用户' + phone.substr(-4),
+                        avatar: data.avatar || data.avatar_thumb || 'https://i.pravatar.cc/200',
+                        signature: data.signature || '',
+                        follows: data.follows || 0,
+                        fans: data.fans || 0,
+                        likes: data.praise || data.likes || 0
+                    }));
+
+                    alert('登录成功');
+                    // 跳转回之前的页面或首页
+                    const redirect = sessionStorage.getItem('loginRedirect') || 'me.html';
+                    sessionStorage.removeItem('loginRedirect');
+                    location.href = redirect;
+                })
+                .catch(function(err) {
+                    loginBtn.disabled = false;
+                    loginBtn.textContent = '登录';
+                    alert(err.msg || '登录失败，请检查手机号和验证码');
+                });
+        }
+    </script>
+</body>
+</html>

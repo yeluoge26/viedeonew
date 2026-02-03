@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <tc_include file="Appapi/Public/head" />
+    <title>身份认证</title>
+    <link rel="stylesheet" type="text/css" href="__PUBLIC__/appapi/css/auth.css?t=1">
+    
+</head>
+<body>
+    <ul class="auth_list">
+        <li>
+            <p class="auth_list_title">真实姓名</p>
+            <p class="auth_list_right">
+                <input type="text" name="realname" id="realname" placeholder="请输入姓名" value="{$info['real_name']}">
+            </p>
+            <p class="clearboth"></p>
+        </li>
+        <li>
+            <p class="auth_list_title">身份证号</p>
+            <p class="auth_list_right">
+                <input type="text" name="cardno" id="cardno" placeholder="请输入身份证号码" value="{$info['cer_no']}">
+            </p>
+            <p class="clearboth"></p>
+        </li>
+        <li>
+            <p class="auth_list_title">手机号码</p>
+            <p class="auth_list_right">
+                <input type="text" name="phone" id="phone" placeholder="请输入手机号码" value="{$info['mobile']}">
+            </p>
+            <p class="clearboth"></p>
+        </li>
+
+        
+    </ul>
+    <div class="line_bd_u">
+        <ul class="upload clearfix">
+            <li>
+                <div class="up_img" data-fileid="up_img2">
+                    <if condition="$info">
+                    <img src="{$info['front1']}">
+                    <else/>
+                    <img src="__PUBLIC__/appapi/images/upload.png">
+                    </if>
+                    <div class="shadd">
+                        <div class="progress_bd"><div class="progress_sp"></div></div>
+                    </div>
+                    <input type="hidden" class="img_input" name="front" id="front" value="{$info['front_view']}">
+                    <input type="file" id="up_img2" class="file_input" name="file"  accept="image/*" style="display:none;"/>
+                </div>
+                <div class="up_t">
+                    证件正面
+                </div>
+            </li>
+            <li>
+                <div class="up_img" data-fileid="up_img3">
+                    <if condition="$info">
+                    <img src="{$info['back1']}">
+                    <else/>
+                    <img src="__PUBLIC__/appapi/images/upload.png">
+                    </if>
+                    <div class="shadd">
+                        <div class="progress_bd"><div class="progress_sp"></div></div>
+                    </div>
+                    <input type="hidden" class="img_input" name="back" id="back" value="{$info['back_view']}">
+                    <input type="file" id="up_img3" class="file_input" name="file"  accept="image/*" style="display:none;"/>
+                </div>
+                <div class="up_t">
+                    证件反面
+                </div>
+            </li>
+            <li>
+                <div class="up_img" data-fileid="up_img4">
+                    <if condition="$info">
+                    <img src="{$info['hand1']}">
+                    <else/>
+                    <img src="__PUBLIC__/appapi/images/upload.png">
+                    </if>
+                    <div class="shadd">
+                        <div class="progress_bd"><div class="progress_sp"></div></div>
+                    </div>
+                    <input type="hidden" class="img_input" name="hand" id="hand" value="{$info['handset_view']}">
+                    <input type="file" id="up_img4" class="file_input" name="file"  accept="image/*" style="display:none;"/>
+                </div>
+                <div class="up_t">
+                    手持证件正面照
+                </div>
+            </li>
+        </ul>
+    </div>
+    <div class="auth_tips">
+        <div class="auth_tips_img">
+            <img src="__PUBLIC__/appapi/images/auth/example.png">
+        </div>
+        <div class="auth_tips_info">
+            请按图示手持证件拍照，必须本人手持身份证，确保证件信息清晰可见。
+        </div>
+    </div>
+
+    <if condition="$info">
+        <if condition="$info['status'] neq 0">
+        <div class="autharea auth_ok">
+            提交重审
+        </div>
+        <else/>
+        <div class="autharea auth_no">
+            信息审核中
+        </div>
+        </if>
+    <else/>
+    <div class="autharea auth_ok">
+        开始认证
+    </div>
+    </if>
+    
+
+<script type="text/javascript">
+    var uid='{$uid}';
+    var token='{$token}';
+    var status='{$info['status']}';
+    var baseSize = 100;
+        function setRem () {
+            var scale = document.documentElement.clientWidth / 750;
+            document.documentElement.style.fontSize = (baseSize * Math.min(scale, 3)) + 'px';
+        }
+        setRem();
+        window.onresize = function () {
+            setRem();
+        }
+</script>
+
+<tc_include file="Appapi/Public/footer" />
+<script src="__PUBLIC__/js/ajaxfileupload.js"></script>
+<script type="text/javascript" src="__PUBLIC__/appapi/js/auth.js?t=1"></script>
+
+</body>
+</html>

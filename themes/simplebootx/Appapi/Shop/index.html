@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <tc_include file="Appapi/Public/head" />
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/appapi/css/shop.css"/> 
+    <title>店铺申请</title>
+</head>
+<body>
+    <div class="ready">
+        <div class="ready_top">
+            <p class="ready_top_t">申请条件</p>
+            <p class="ready_top_d">完成以下条件即可申请店铺</p>
+        </div>
+        <div class="ready_info">
+            <ul>
+                <li>
+                    <div class="li_img">
+                        <img src="__PUBLIC__/appapi/images/shop/fans.png">
+                    </div>
+                    <div class="li_info">
+                        <p class="li_info_t">粉丝数量</p>
+                        <p class="li_info_d">>={$shop_fans}名</p>
+                    </div>
+                    
+                    <div class="li_btn">
+                        <if condition="$fans_ok eq 1">
+                        <span class="ok">已达成</span>
+                        <else/>
+                        <span class="fans_no">未达成</span>
+                        </if>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="li_img">
+                        <img src="__PUBLIC__/appapi/images/shop/video.png">
+                    </div>
+                    <div class="li_info">
+                        <p class="li_info_t">发布视频</p>
+                        <p class="li_info_d">>={$shop_videos}个（审核通过的视频）</p>
+                    </div>
+                    
+                    <div class="li_btn">
+                        <if condition="$video_ok eq 1">
+                        <span class="ok">已达成</span>
+                        <else/>
+                        <!-- <span class="no">去完成</span> -->
+                        <span class="fans_no">未达成</span>
+                        </if>
+                    </div>
+                </li>
+                
+                <li>
+                    <div class="li_img">
+                        <img src="__PUBLIC__/appapi/images/shop/auth.png">
+                    </div>
+                    <div class="li_info">
+                        <p class="li_info_t">实名认证</p>
+                        <p class="li_info_d">通过认证</p>
+                    </div>
+                    
+                    <div class="li_btn">
+                        <if condition="$auth_ok eq 1">
+                        <span class="ok">已达成</span>
+                        <else/>
+                        <!-- <span class="no">去完成</span> -->
+                        <span class="fans_no">未达成</span>
+                        </if>
+                        
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <div class="ready_tips">
+            <div class="ready_tips_t">获得权益</div>
+            <div class="ready_tips_d">店铺创建完成您将获得以下权益</div>
+            <div class="ready_tips_d2">
+                <p>1. 发布视频时可添加商品并售卖。</p>
+                <p>2. 拥有个人主页店铺橱窗。</p>
+            </div>
+        </div>
+        <div class="ready_apply">
+            <a <if condition="$isapply eq '1'">href="/index.php?g=appapi&m=shop&a=apply&uid={$uid}&token={$token}" class="on"</if> >立即申请</a>
+        </div>
+
+    </div>
+	<script>
+		var uid='{$uid}';
+		var token='{$token}';
+        var baseSize = 100;
+        function setRem () {
+          var scale = document.documentElement.clientWidth / 750;
+          document.documentElement.style.fontSize = (baseSize * Math.min(scale, 3)) + 'px';
+        }
+        setRem();
+        window.onresize = function () {
+          setRem();
+        }
+	</script>
+	<tc_include file="Appapi/Public/footer" />
+</body>
+</html>

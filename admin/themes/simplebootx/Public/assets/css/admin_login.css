@@ -1,0 +1,240 @@
+/*
+===================
+@explain: 系统后台登录页面
+@copyright: Copyright 2012,phpwind.com
+@author: longwenid@gmail.com
+$Id: admin_login.css 22060 2012-12-19 03:01:55Z yanchixia $
+===================
+*/
+html{
+	padding:0;
+	margin:0;
+	background: url('../images/bg.jpg') no-repeat;
+	background-size: 100%;
+	/* background:#1262B7; */
+}
+body {
+	padding:0;
+	margin:0;
+	font-family:Arial, "Microsoft Yahei";
+	width: 421px;
+	height: 460px;
+	margin: 10% auto;
+	background: url('../images/denglu.png');
+}
+body{
+	padding: 0;
+	margin: 0;
+	font-family: Arial, "Microsoft Yahei";
+	width: 100%;
+	height: 460px;
+	position: relative;
+	margin: 10% auto;
+	background: url(../images/denglu.png) no-repeat;
+	/* background: 10%; */
+	Background-position: 50%;
+}
+
+.wrap {
+	width: 292px;
+	overflow:hidden;
+	position: relative;
+    /* margin: 80px auto 0; */
+    top: 156px;
+	/* left:61px; */
+	/* left: 39%; */
+	margin: 0 auto;
+	/* margin: 180px auto 0; */
+	-webkit-animation: bounceIn 600ms linear;
+	-moz-animation: bounceIn 600ms linear;
+	-o-animation: bounceIn 600ms linear;
+	animation: bounceIn 600ms linear;
+}
+
+h1 a {
+	display: block;
+	height: 50px;
+	width: 250px;
+	margin:auto;
+	overflow: hidden;
+	text-indent: -2000em;
+	background: url(../images/logo.png) no-repeat center center;
+}
+form{
+	width:292px;
+}
+.login{
+	width: 292px;
+}
+.login ul,
+.login li{
+	padding:0;
+	margin:0;
+	list-style:none;
+}
+.login ul{
+	background:#fff;
+	border:none;
+	/* box-shadow:1px 1px 1px #ccc inset;
+	border-radius:3px; */
+	overflow:hidden;
+	margin-bottom:15px;
+	width:292px;
+	overflow:hidden;
+}
+.login li{
+	/* border-top:1px solid #d3d4d4; */
+	padding:5px;
+	margin-top: 10px;
+	background: #FAFAFA;
+}
+.login .verifycode-wrapper{
+	padding:0px;
+}
+.login li img{
+	vertical-align:top;
+}
+.img-1{
+	position: relative;
+	top: 5px;
+	left: 3px;
+}
+.login .input {
+	width: 225px;
+    padding: 5px;
+    vertical-align: middle;
+    border: 0 none;
+    background: transparent;
+    font-size: 18px;
+    font-family: Arial,"Microsoft Yahei";
+    margin-left: 15px;
+    letter-spacing: 1px;
+}
+.login .input:focus {
+	outline:0 none;
+}
+.btn {
+	width: 292px;
+	height: 38px;
+	padding: 0;
+	margin: 0;
+	vertical-align: middle;
+	background:#7E01FF;
+	overflow:visible;
+	color:#fff;
+	font-size:20px;
+	cursor:pointer;
+	font-family:Arial, "Microsoft Yahei";
+	border:none;
+	border-radius:3px;
+}
+.btn:hover{
+	background-position:0 -40px;
+}
+.btn:active {
+	background-position:0 -80px;
+}
+.placeholder{
+	color: #BEBEBE;
+}
+/*登录框动画*/
+@-webkit-keyframes bounceIn {
+	0% {
+		opacity: 0;
+		-webkit-transform: scale(.3);
+	}
+
+	50% {
+		opacity: 1;
+		-webkit-transform: scale(1.05);
+	}
+
+	70% {
+		-webkit-transform: scale(.9);
+	}
+
+	100% {
+		-webkit-transform: scale(1);
+	}
+}
+@-moz-keyframes bounceIn {
+	0% {
+		opacity: 0;
+		-moz-transform: scale(.3);
+	}
+
+	50% {
+		opacity: 1;
+		-moz-transform: scale(1.05);
+	}
+
+	70% {
+		-moz-transform: scale(.9);
+	}
+
+	100% {
+		-moz-transform: scale(1);
+	}
+}
+@-o-keyframes bounceIn {
+	0% {
+		opacity: 0;
+		-o-transform: scale(.3);
+	}
+
+	50% {
+		opacity: 1;
+		-o-transform: scale(1.05);
+	}
+
+	70% {
+		-o-transform: scale(.9);
+	}
+
+	100% {
+		-o-transform: scale(1);
+	}
+}
+@keyframes bounceIn {
+	0% {
+		opacity: 0;
+		transform: scale(.3);
+	}
+
+	50% {
+		opacity: 1;
+		transform: scale(1.05);
+	}
+
+	70% {
+		transform: scale(.9);
+	}
+
+	100% {
+		transform: scale(1);
+	}
+}
+
+.footer{
+    width: 682px;
+    height: 21px;
+    margin: 0 auto;
+    position: relative;
+    top: 79%;
+    color: #fff;
+    font-size: 15px;
+}
+.footer-1{
+	float: left;
+
+}
+.footer-2{
+	float: left;
+
+	margin-left: 30px;
+}
+.footer-3{
+	float: left;
+
+	margin-left: 30px;
+}

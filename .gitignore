@@ -1,0 +1,40 @@
+# Mobile apps (not needed on server)
+mobile/
+
+# Runtime and cache
+data/runtime/
+api/runtime/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Node
+node_modules/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# Deployment scripts (local only)
+deploy.py
+deploy_fix.py
+deploy_code.py
+upload_code.py
+
+# Claude
+.claude/

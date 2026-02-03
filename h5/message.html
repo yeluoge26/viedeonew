@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <title>消息 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page msg-page">
+        <!-- 顶部标题 -->
+        <div class="msg-header">
+            <span class="title">消息</span>
+        </div>
+
+        <!-- 消息类型快捷入口 -->
+        <div class="msg-types">
+            <div class="msg-type" onclick="goPage('msg-fans.html')">
+                <div class="icon" style="background: linear-gradient(135deg, #fe2c55, #ff6b6b);">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                    <span class="badge" id="fansBadge" style="display:none;">0</span>
+                </div>
+                <span class="text">新粉丝</span>
+            </div>
+            <div class="msg-type" onclick="goPage('msg-like.html')">
+                <div class="icon" style="background: linear-gradient(135deg, #ff6b6b, #ffa500);">
+                    <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                    <span class="badge" id="likeBadge" style="display:none;">0</span>
+                </div>
+                <span class="text">赞</span>
+            </div>
+            <div class="msg-type" onclick="goPage('msg-at.html')">
+                <div class="icon" style="background: linear-gradient(135deg, #00f2ea, #00c4b4);">
+                    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10h5v-2h-5c-4.34 0-8-3.66-8-8s3.66-8 8-8 8 3.66 8 8v1.43c0 .79-.71 1.57-1.5 1.57s-1.5-.78-1.5-1.57V12c0-2.76-2.24-5-5-5s-5 2.24-5 5 2.24 5 5 5c1.38 0 2.64-.56 3.54-1.47.65.89 1.77 1.47 2.96 1.47 1.97 0 3.5-1.6 3.5-3.57V12c0-5.52-4.48-10-10-10zm0 13c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg>
+                    <span class="badge" id="atBadge" style="display:none;">0</span>
+                </div>
+                <span class="text">@我</span>
+            </div>
+            <div class="msg-type" onclick="goPage('msg-comment.html')">
+                <div class="icon" style="background: linear-gradient(135deg, #9b59b6, #8e44ad);">
+                    <svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg>
+                    <span class="badge" id="commentBadge" style="display:none;">0</span>
+                </div>
+                <span class="text">评论</span>
+            </div>
+        </div>
+
+        <!-- 系统消息 -->
+        <div class="msg-list" style="border-top: 8px solid #111;">
+            <div class="msg-item" onclick="goPage('msg-system.html')">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #3498db, #2980b9); display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+                </div>
+                <div class="content">
+                    <div class="name">系统通知</div>
+                    <div class="preview">欢迎使用TECHSPACE短视频</div>
+                </div>
+                <span class="time">刚刚</span>
+            </div>
+
+            <div class="msg-item" onclick="goPage('msg-official.html')">
+                <div style="width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, #e74c3c, #c0392b); display: flex; align-items: center; justify-content: center; margin-right: 12px;">
+                    <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                </div>
+                <div class="content">
+                    <div class="name">官方消息</div>
+                    <div class="preview">精彩活动即将开始</div>
+                </div>
+                <span class="time">1小时前</span>
+            </div>
+        </div>
+
+        <!-- 私信列表 -->
+        <div class="msg-list" id="chatList">
+            <!-- 私信由JS动态加载 -->
+        </div>
+
+        <!-- 底部导航 -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                </div>
+                <span>首页</span>
+            </a>
+            <a href="follow.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/></svg>
+                </div>
+                <span>关注</span>
+            </a>
+            <div class="nav-publish" onclick="goPage('publish.html')">
+                <svg viewBox="0 0 24 24" fill="#000"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+            <a href="message.html" class="nav-item active">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <span>消息</span>
+            </a>
+            <a href="me.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <span>我的</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        // XSS防护
+        const escapeHtml = (str) => String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            if (!localStorage.getItem('token')) {
+                sessionStorage.setItem('loginRedirect', 'message.html');
+                location.href = 'login.html';
+                return;
+            }
+            loadChatList();
+        });
+
+        // 加载私信列表
+        function loadChatList() {
+            const list = document.getElementById('chatList');
+
+            list.innerHTML = '<div class="msg-item" style="justify-content:center;color:#666;">加载中...</div>';
+
+            // 调用API获取私信列表
+            API.getChatList(1)
+                .then(function(data) {
+                    const chats = (data.list || data || []).map(c => ({
+                        id: c.uid || c.touid,
+                        avatar: c.avatar || c.userinfo?.avatar || 'https://i.pravatar.cc/100',
+                        nickname: c.user_nicename || c.userinfo?.user_nicename || '用户',
+                        lastMsg: c.content || c.last_msg || '',
+                        time: c.datetime || c.addtime || '',
+                        unread: c.unread || 0
+                    }));
+                    renderChatList(chats);
+                })
+                .catch(function(err) {
+                    console.log('获取私信列表失败:', err);
+                    list.innerHTML = '<div class="msg-item" style="justify-content:center;color:#666;">暂无私信</div>';
+                });
+        }
+
+        // 渲染私信列表
+        function renderChatList(chats) {
+            const list = document.getElementById('chatList');
+
+            if (!chats || chats.length === 0) {
+                list.innerHTML = '<div class="msg-item" style="justify-content:center;color:#666;">暂无私信</div>';
+                return;
+            }
+
+            list.innerHTML = chats.map(c => `
+                <div class="msg-item" onclick="goChat(${parseInt(c.id)})">
+                    <img class="avatar" src="${escapeHtml(c.avatar)}" alt="">
+                    <div class="content">
+                        <div class="name">${escapeHtml(c.nickname)}</div>
+                        <div class="preview">${escapeHtml(c.lastMsg)}</div>
+                    </div>
+                    <span class="time">${escapeHtml(c.time)}</span>
+                    ${c.unread > 0 ? '<span class="badge" style="background:#fe2c55;color:#fff;border-radius:10px;padding:2px 6px;font-size:11px;margin-left:5px;">' + c.unread + '</span>' : ''}
+                </div>
+            `).join('');
+        }
+
+        // 跳转到聊天页
+        function goChat(uid) {
+            location.href = 'chat.html?uid=' + uid;
+        }
+
+        // 页面跳转
+        function goPage(url) {
+            location.href = url;
+        }
+    </script>
+</body>
+</html>

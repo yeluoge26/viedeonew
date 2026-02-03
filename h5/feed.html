@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <title>热门视频 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: #000;
+            touch-action: pan-y;
+        }
+
+        .feed-container {
+            height: 100%;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .video-wrapper {
+            height: 100%;
+            transition: transform 0.3s ease-out;
+        }
+
+        .video-slide {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #000;
+        }
+
+        .video-slide video {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            background: #000;
+        }
+
+        /* 视频封面 */
+        .video-poster {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 1;
+        }
+        .video-slide.playing .video-poster { display: none; }
+
+        /* 播放按钮 */
+        .play-btn {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .video-slide.paused .play-btn { opacity: 1; }
+        .play-btn svg { width: 40px; height: 40px; fill: #fff; margin-left: 5px; }
+
+        /* 右侧操作栏 */
+        .action-bar {
+            position: absolute;
+            right: 10px;
+            bottom: 150px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 20;
+        }
+
+        .action-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .action-item .icon {
+            width: 48px;
+            height: 48px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .action-item svg {
+            width: 32px;
+            height: 32px;
+            fill: #fff;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+        .action-item.liked svg { fill: #fe2c55; }
+        .action-item span {
+            font-size: 12px;
+            color: #fff;
+            margin-top: 2px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+
+        /* 用户头像 */
+        .author-avatar {
+            position: relative;
+            margin-bottom: 5px;
+        }
+        .author-avatar img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 2px solid #fff;
+            object-fit: cover;
+        }
+        .author-avatar .follow-btn {
+            position: absolute;
+            bottom: -8px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: #fe2c55;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .author-avatar .follow-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: #fff;
+        }
+        .author-avatar.followed .follow-btn { display: none; }
+
+        /* 底部信息 */
+        .video-info {
+            position: absolute;
+            left: 15px;
+            right: 80px;
+            bottom: 80px;
+            z-index: 20;
+        }
+        .video-info .author {
+            font-size: 16px;
+            font-weight: bold;
+            color: #fff;
+            margin-bottom: 8px;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .video-info .desc {
+            font-size: 14px;
+            color: #fff;
+            line-height: 1.4;
+            max-height: 60px;
+            overflow: hidden;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .video-info .music {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+            font-size: 13px;
+            color: #fff;
+        }
+        .video-info .music svg {
+            width: 16px;
+            height: 16px;
+            fill: #fff;
+            margin-right: 6px;
+        }
+        .video-info .music span {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* 底部安全区域 */
+        .bottom-safe {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(60px + env(safe-area-inset-bottom));
+            background: linear-gradient(transparent, rgba(0,0,0,0.5));
+            z-index: 15;
+            pointer-events: none;
+        }
+
+        /* 底部导航 */
+        .feed-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: calc(50px + env(safe-area-inset-bottom));
+            padding-bottom: env(safe-area-inset-bottom);
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 100;
+        }
+        .feed-nav a {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-decoration: none;
+            color: #999;
+            font-size: 10px;
+            padding: 5px 15px;
+        }
+        .feed-nav a.active { color: #fff; }
+        .feed-nav a svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+            margin-bottom: 2px;
+        }
+        .feed-nav .nav-publish {
+            width: 44px;
+            height: 32px;
+            background: linear-gradient(135deg, #25f4ee, #fe2c55);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .feed-nav .nav-publish svg {
+            width: 20px;
+            height: 20px;
+            fill: #fff;
+            margin: 0;
+        }
+
+        /* 顶部状态栏 */
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: calc(44px + env(safe-area-inset-top));
+            padding-top: env(safe-area-inset-top);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            background: linear-gradient(rgba(0,0,0,0.3), transparent);
+        }
+        .top-tabs {
+            display: flex;
+            gap: 20px;
+        }
+        .top-tabs span {
+            font-size: 16px;
+            color: rgba(255,255,255,0.7);
+            cursor: pointer;
+            padding: 5px 10px;
+        }
+        .top-tabs span.active {
+            color: #fff;
+            font-weight: bold;
+        }
+
+        /* 加载提示 */
+        .loading-tip {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-size: 14px;
+            z-index: 5;
+        }
+        .loading-tip .spinner {
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,0.3);
+            border-top-color: #fff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* 进度条 */
+        .progress-bar {
+            position: absolute;
+            bottom: calc(50px + env(safe-area-inset-bottom));
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: rgba(255,255,255,0.3);
+            z-index: 25;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: #fff;
+            width: 0%;
+            transition: width 0.1s linear;
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部Tab -->
+    <div class="top-bar">
+        <div class="top-tabs" id="topTabs">
+            <span data-tab="follow" onclick="location.href='follow.html'">关注</span>
+            <span data-tab="recommend" class="active">推荐</span>
+            <span data-tab="hot">热门</span>
+        </div>
+    </div>
+
+    <!-- 视频容器 -->
+    <div class="feed-container" id="feedContainer">
+        <div class="video-wrapper" id="videoWrapper">
+            <!-- 视频slides由JS动态生成 -->
+        </div>
+    </div>
+
+    <!-- 底部导航 -->
+    <nav class="feed-nav">
+        <a href="index.html">
+            <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+            <span>首页</span>
+        </a>
+        <a href="follow.html">
+            <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+            <span>关注</span>
+        </a>
+        <a href="publish.html">
+            <div class="nav-publish">
+                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+        </a>
+        <a href="message.html">
+            <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            <span>消息</span>
+        </a>
+        <a href="me.html">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+            <span>我的</span>
+        </a>
+    </nav>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        // 视频数据
+        let videos = [];
+        let currentIndex = 0;
+        let isLoading = false;
+        let page = 1;
+        let currentTab = 'recommend'; // 当前tab: recommend 或 hot
+
+        // 触摸相关
+        let startY = 0;
+        let currentY = 0;
+        let isDragging = false;
+        let videoElements = [];
+
+        // XSS防护
+        const escapeHtml = (str) => App && App.escapeHtml ? App.escapeHtml(str) :
+            String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+        // 格式化数字
+        function formatNum(num) {
+            num = parseInt(num) || 0;
+            if (num >= 10000) return (num / 10000).toFixed(1) + 'w';
+            return num;
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', async function() {
+            // 从URL参数获取当前tab
+            const urlParams = new URLSearchParams(window.location.search);
+            currentTab = urlParams.get('tab') || 'recommend';
+
+            // 更新顶部tab样式
+            updateTopTabs();
+
+            // 设置标题
+            document.title = (currentTab === 'hot' ? '热门' : '推荐') + '视频 - TECHSPACE短视频';
+
+            // 初始化tab点击事件
+            initTabEvents();
+
+            await loadVideos();
+            initTouchEvents();
+        });
+
+        // 更新顶部tab样式
+        function updateTopTabs() {
+            document.querySelectorAll('#topTabs span').forEach(span => {
+                span.classList.remove('active');
+                if (span.dataset.tab === currentTab) {
+                    span.classList.add('active');
+                }
+            });
+        }
+
+        // 初始化tab点击事件
+        function initTabEvents() {
+            document.querySelectorAll('#topTabs span[data-tab]').forEach(span => {
+                span.addEventListener('click', function() {
+                    const tab = this.dataset.tab;
+                    if (tab === 'follow') {
+                        location.href = 'follow.html';
+                        return;
+                    }
+                    if (tab !== currentTab) {
+                        location.href = 'feed.html?tab=' + tab;
+                    }
+                });
+            });
+        }
+
+        // 加载视频列表
+        async function loadVideos() {
+            if (isLoading) return;
+            isLoading = true;
+
+            try {
+                // 根据tab加载不同的API
+                let data;
+                if (currentTab === 'hot') {
+                    data = await API.getVideoList(page); // 热门视频
+                } else {
+                    data = await API.getRecommendVideos(page); // 推荐视频
+                }
+
+                const list = data.list || data || [];
+                if (list.length > 0) {
+                    videos = videos.concat(list);
+                    page++;
+                } else if (videos.length === 0) {
+                    // 如果没有数据，使用演示数据
+                    const demoVideos = generateDemoVideos();
+                    videos = videos.concat(demoVideos);
+                }
+            } catch (e) {
+                console.log('API加载失败，使用演示数据:', e);
+                // 使用演示数据
+                if (videos.length === 0) {
+                    const demoVideos = generateDemoVideos();
+                    videos = videos.concat(demoVideos);
+                }
+            }
+
+            renderVideos();
+            isLoading = false;
+
+            // 自动播放第一个视频
+            if (currentIndex === 0 && videos.length > 0) {
+                setTimeout(() => playVideo(0), 300);
+            }
+        }
+
+        // 生成演示数据
+        function generateDemoVideos() {
+            const demos = [];
+            const titles = [
+                '今天天气真好，出来拍个视频 #日常 #生活',
+                '分享一个超简单的美食做法 #美食 #教程',
+                '这个舞蹈太好看了！跟我一起学 #舞蹈',
+                '旅行vlog｜探索城市的美好角落',
+                '猫咪的日常，太可爱了！#萌宠',
+                '健身打卡第100天 #健身 #自律',
+                '今日穿搭分享 #穿搭 #时尚',
+                '学习vlog｜高效学习的一天',
+                '深夜食堂｜一个人的晚餐 #美食',
+                '周末日常｜宅家的快乐时光'
+            ];
+            const baseId = videos.length + 1;
+            for (let i = 0; i < 10; i++) {
+                demos.push({
+                    id: baseId + i,
+                    uid: 100 + i,
+                    title: titles[i % titles.length],
+                    thumb: `https://picsum.photos/720/1280?random=${Date.now() + i}`,
+                    href: '', // 演示模式无实际视频
+                    userinfo: {
+                        id: 100 + i,
+                        user_nicename: '创作者' + (100 + i),
+                        avatar: `https://i.pravatar.cc/100?img=${10 + i}`
+                    },
+                    likes: Math.floor(Math.random() * 50000),
+                    comments: Math.floor(Math.random() * 1000),
+                    shares: Math.floor(Math.random() * 500),
+                    islike: Math.random() > 0.7 ? '1' : '0',
+                    isattent: Math.random() > 0.8 ? '1' : '0'
+                });
+            }
+            return demos;
+        }
+
+        // 渲染视频
+        function renderVideos() {
+            const wrapper = document.getElementById('videoWrapper');
+            wrapper.innerHTML = videos.map((v, idx) => `
+                <div class="video-slide" data-index="${idx}" data-id="${v.id}">
+                    <img class="video-poster" src="${escapeHtml(v.thumb)}" alt="">
+                    <video
+                        src="${escapeHtml(v.href || '')}"
+                        poster="${escapeHtml(v.thumb)}"
+                        loop
+                        playsinline
+                        webkit-playsinline
+                        x5-video-player-type="h5"
+                        x5-video-player-fullscreen="true"
+                        preload="metadata"
+                    ></video>
+
+                    <div class="play-btn" onclick="togglePlay(${idx})">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                    </div>
+
+                    <div class="loading-tip" id="loading${idx}">
+                        <div class="spinner"></div>
+                        <div>加载中...</div>
+                    </div>
+
+                    <div class="bottom-safe"></div>
+
+                    <div class="video-info">
+                        <div class="author">@${escapeHtml(v.userinfo?.user_nicename || '用户')}</div>
+                        <div class="desc">${escapeHtml(v.title || '')}</div>
+                        <div class="music">
+                            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                            <span>原创音乐 - ${escapeHtml(v.userinfo?.user_nicename || '用户')}</span>
+                        </div>
+                    </div>
+
+                    <div class="action-bar">
+                        <div class="action-item author-avatar ${v.isattent === '1' ? 'followed' : ''}" onclick="goUser(${v.uid || v.userinfo?.id})">
+                            <img src="${escapeHtml(v.userinfo?.avatar || v.userinfo?.avatar_thumb || 'https://i.pravatar.cc/100')}" alt="">
+                            <div class="follow-btn" onclick="event.stopPropagation();followUser(this, ${v.uid || v.userinfo?.id})">
+                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                            </div>
+                        </div>
+                        <div class="action-item ${v.islike === '1' ? 'liked' : ''}" onclick="likeVideo(this, ${idx})">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </div>
+                            <span>${formatNum(v.likes)}</span>
+                        </div>
+                        <div class="action-item" onclick="showComments(${v.id})">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg>
+                            </div>
+                            <span>${formatNum(v.comments)}</span>
+                        </div>
+                        <div class="action-item" onclick="shareVideo(${v.id})">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92z"/></svg>
+                            </div>
+                            <span>${formatNum(v.shares)}</span>
+                        </div>
+                    </div>
+
+                    <div class="progress-bar">
+                        <div class="fill" id="progress${idx}"></div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 更新wrapper高度
+            wrapper.style.height = `${videos.length * 100}vh`;
+
+            // 缓存video元素
+            videoElements = document.querySelectorAll('.video-slide video');
+        }
+
+        // 初始化触摸事件
+        function initTouchEvents() {
+            const container = document.getElementById('feedContainer');
+            const wrapper = document.getElementById('videoWrapper');
+
+            container.addEventListener('touchstart', (e) => {
+                startY = e.touches[0].clientY;
+                isDragging = true;
+                wrapper.style.transition = 'none';
+            }, { passive: true });
+
+            container.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                currentY = e.touches[0].clientY;
+                const diff = currentY - startY;
+                const offset = -currentIndex * window.innerHeight + diff;
+
+                // 限制边界
+                const maxOffset = 0;
+                const minOffset = -(videos.length - 1) * window.innerHeight;
+                const clampedOffset = Math.max(minOffset, Math.min(maxOffset, offset));
+
+                wrapper.style.transform = `translateY(${clampedOffset}px)`;
+            }, { passive: true });
+
+            container.addEventListener('touchend', (e) => {
+                if (!isDragging) return;
+                isDragging = false;
+
+                const diff = currentY - startY;
+                const threshold = window.innerHeight * 0.2;
+
+                wrapper.style.transition = 'transform 0.3s ease-out';
+
+                if (diff < -threshold && currentIndex < videos.length - 1) {
+                    // 上滑，下一个视频
+                    goToVideo(currentIndex + 1);
+                } else if (diff > threshold && currentIndex > 0) {
+                    // 下滑，上一个视频
+                    goToVideo(currentIndex - 1);
+                } else {
+                    // 回弹
+                    goToVideo(currentIndex);
+                }
+            }, { passive: true });
+
+            // 点击暂停/播放
+            container.addEventListener('click', (e) => {
+                if (e.target.closest('.action-bar') || e.target.closest('.video-info') ||
+                    e.target.closest('.author-avatar') || e.target.closest('.feed-nav')) return;
+                togglePlay(currentIndex);
+            });
+        }
+
+        // 切换到指定视频
+        function goToVideo(index) {
+            if (index < 0 || index >= videos.length) return;
+
+            // 暂停当前视频
+            if (videoElements[currentIndex]) {
+                videoElements[currentIndex].pause();
+                document.querySelectorAll('.video-slide')[currentIndex]?.classList.remove('playing');
+                document.querySelectorAll('.video-slide')[currentIndex]?.classList.add('paused');
+            }
+
+            currentIndex = index;
+            const wrapper = document.getElementById('videoWrapper');
+            wrapper.style.transform = `translateY(-${currentIndex * 100}vh)`;
+
+            // 播放新视频
+            setTimeout(() => playVideo(currentIndex), 300);
+
+            // 预加载更多视频
+            if (currentIndex >= videos.length - 3) {
+                loadVideos();
+            }
+        }
+
+        // 播放视频
+        function playVideo(index) {
+            const video = videoElements[index];
+            const slide = document.querySelectorAll('.video-slide')[index];
+            const loadingTip = document.getElementById(`loading${index}`);
+
+            if (!video || !slide) return;
+
+            slide.classList.remove('paused');
+            slide.classList.add('playing');
+
+            // 如果没有视频源，只显示封面
+            if (!video.src || video.src === window.location.href) {
+                if (loadingTip) loadingTip.style.display = 'none';
+                return;
+            }
+
+            video.play().then(() => {
+                if (loadingTip) loadingTip.style.display = 'none';
+            }).catch(e => {
+                console.log('自动播放失败:', e);
+                slide.classList.add('paused');
+                if (loadingTip) loadingTip.style.display = 'none';
+            });
+
+            // 更新进度条
+            video.ontimeupdate = () => {
+                const progress = document.getElementById(`progress${index}`);
+                if (progress && video.duration) {
+                    progress.style.width = `${(video.currentTime / video.duration) * 100}%`;
+                }
+            };
+        }
+
+        // 暂停/播放切换
+        function togglePlay(index) {
+            const video = videoElements[index];
+            const slide = document.querySelectorAll('.video-slide')[index];
+
+            if (!video || !slide) return;
+
+            if (video.paused) {
+                video.play().catch(() => {});
+                slide.classList.remove('paused');
+                slide.classList.add('playing');
+            } else {
+                video.pause();
+                slide.classList.remove('playing');
+                slide.classList.add('paused');
+            }
+        }
+
+        // 点赞
+        async function likeVideo(el, index) {
+            if (!App.checkLogin()) {
+                if (confirm('请先登录')) location.href = 'login.html';
+                return;
+            }
+
+            const video = videos[index];
+            const isLiked = el.classList.contains('liked');
+
+            el.classList.toggle('liked');
+            const countEl = el.querySelector('span');
+            let count = parseInt(video.likes) || 0;
+
+            if (isLiked) {
+                count = Math.max(0, count - 1);
+            } else {
+                count++;
+                // 点赞动画
+                el.style.transform = 'scale(1.2)';
+                setTimeout(() => el.style.transform = '', 200);
+            }
+
+            countEl.textContent = formatNum(count);
+            video.likes = count;
+            video.islike = isLiked ? '0' : '1';
+
+            // 调用API
+            try {
+                await API.addLike(video.id);
+            } catch (e) {
+                console.log('点赞API调用失败');
+            }
+        }
+
+        // 显示评论
+        function showComments(videoId) {
+            App.toast('评论功能开发中');
+        }
+
+        // 分享
+        function shareVideo(videoId) {
+            const url = `${location.origin}/h5/play.html?id=${videoId}`;
+            if (navigator.share) {
+                navigator.share({ title: '分享视频', url });
+            } else {
+                App.copyToClipboard(url);
+                App.toast('链接已复制');
+            }
+        }
+
+        // 关注用户
+        async function followUser(el, uid) {
+            if (!App.checkLogin()) {
+                if (confirm('请先登录')) location.href = 'login.html';
+                return;
+            }
+
+            const avatar = el.closest('.author-avatar');
+            avatar.classList.add('followed');
+            el.style.display = 'none';
+            App.toast('关注成功');
+
+            try {
+                await API.setAttention(uid);
+            } catch (e) {
+                console.log('关注API调用失败');
+            }
+        }
+
+        // 跳转用户主页
+        function goUser(uid) {
+            location.href = `user.html?uid=${uid}`;
+        }
+    </script>
+</body>
+</html>

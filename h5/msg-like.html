@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>赞 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .msg-page { padding: 60px 15px 30px; }
+        .like-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #222;
+        }
+        .like-item img.avatar { width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; }
+        .like-info { flex: 1; }
+        .like-info .text { font-size: 14px; line-height: 1.4; }
+        .like-info .text span { color: #fff; }
+        .like-info .time { font-size: 12px; color: #666; margin-top: 4px; }
+        .like-item img.video { width: 44px; height: 60px; border-radius: 4px; object-fit: cover; }
+    </style>
+</head>
+<body>
+    <div class="page page-full">
+        <div class="header" style="background: #000;">
+            <div class="header-btn" onclick="history.back()">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </div>
+            <span class="header-title">赞</span>
+            <div class="header-btn"></div>
+        </div>
+
+        <div class="msg-page" id="likeList"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const list = document.getElementById('likeList');
+            const likes = [];
+            for (let i = 0; i < 20; i++) {
+                likes.push({
+                    id: i,
+                    avatar: 'https://i.pravatar.cc/100?img=' + (50 + i),
+                    nickname: '用户' + (400 + i),
+                    time: Math.floor(Math.random() * 24) + '小时前',
+                    video: 'https://picsum.photos/100/140?random=' + (i + 300)
+                });
+            }
+
+            list.innerHTML = likes.map(l => `
+                <div class="like-item">
+                    <img class="avatar" src="${l.avatar}" alt="">
+                    <div class="like-info">
+                        <div class="text"><span>${l.nickname}</span> 赞了你的作品</div>
+                        <div class="time">${l.time}</div>
+                    </div>
+                    <img class="video" src="${l.video}" alt="">
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>

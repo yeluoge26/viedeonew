@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>发布视频 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .publish-page { padding: 60px 15px 30px; }
+        .upload-area {
+            width: 100%;
+            aspect-ratio: 9/16;
+            max-height: 400px;
+            background: #1a1a1a;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        .upload-area svg { width: 60px; height: 60px; fill: #666; }
+        .upload-area p { color: #666; margin-top: 10px; font-size: 14px; }
+        .upload-area video { width: 100%; height: 100%; object-fit: cover; position: absolute; }
+        .upload-area input { display: none; }
+        .form-item {
+            background: #1a1a1a;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 12px;
+        }
+        .form-item label { font-size: 14px; color: #999; display: block; margin-bottom: 8px; }
+        .form-item input, .form-item textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 15px;
+            resize: none;
+        }
+        .form-item textarea { height: 80px; }
+        .form-row { display: flex; align-items: center; justify-content: space-between; }
+        .form-row svg { width: 20px; height: 20px; fill: #666; }
+        .publish-btn {
+            width: 100%;
+            height: 48px;
+            background: var(--primary-color);
+            border: none;
+            border-radius: 24px;
+            color: #fff;
+            font-size: 16px;
+            margin-top: 20px;
+        }
+        .publish-btn:disabled { opacity: 0.5; }
+
+        /* 进度条样式 */
+        .progress-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        .progress-overlay.show { display: flex; }
+        .progress-bar {
+            width: 80%;
+            height: 8px;
+            background: #333;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 20px;
+        }
+        .progress-bar .fill {
+            height: 100%;
+            background: var(--primary-color);
+            width: 0%;
+            transition: width 0.3s;
+        }
+        .progress-text {
+            color: #fff;
+            font-size: 16px;
+            margin-top: 15px;
+        }
+        .progress-percent {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        /* 封面预览 */
+        .thumb-preview {
+            margin-top: 10px;
+            text-align: center;
+        }
+        .thumb-preview img {
+            width: 80px;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 2px solid var(--primary-color);
+        }
+        .thumb-preview span {
+            display: block;
+            font-size: 12px;
+            color: #999;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page page-full">
+        <div class="header" style="background: #000;">
+            <div class="header-btn" onclick="history.back()">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+            </div>
+            <span class="header-title">发布视频</span>
+            <div class="header-btn"></div>
+        </div>
+
+        <div class="publish-page">
+            <div class="upload-area" onclick="document.getElementById('videoInput').click()">
+                <video id="videoPreview" style="display:none;" playsinline></video>
+                <svg viewBox="0 0 24 24" id="uploadIcon"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                <p id="uploadText">点击上传视频</p>
+                <input type="file" id="videoInput" accept="video/*" onchange="previewVideo(this)">
+            </div>
+
+            <div class="thumb-preview" id="thumbPreview" style="display:none;">
+                <img id="thumbImg" src="" alt="封面">
+                <span>自动截取封面</span>
+            </div>
+
+            <div class="form-item">
+                <label>视频描述</label>
+                <textarea id="desc" placeholder="添加描述，让更多人看到你的作品..."></textarea>
+            </div>
+
+            <div class="form-item form-row" onclick="selectLocation()">
+                <span id="locationText">添加位置</span>
+                <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+            </div>
+
+            <div class="form-item form-row">
+                <span>谁可以看</span>
+                <select id="privacy" style="background:transparent;border:none;color:#fff;font-size:14px;">
+                    <option value="0">所有人</option>
+                    <option value="1">仅粉丝</option>
+                    <option value="2">仅自己</option>
+                </select>
+            </div>
+
+            <button class="publish-btn" id="publishBtn" disabled onclick="publish()">发布</button>
+        </div>
+    </div>
+
+    <!-- 进度遮罩 -->
+    <div class="progress-overlay" id="progressOverlay">
+        <div class="progress-percent" id="progressPercent">0%</div>
+        <div class="progress-bar">
+            <div class="fill" id="progressFill"></div>
+        </div>
+        <div class="progress-text" id="progressText">正在上传视频...</div>
+    </div>
+
+    <!-- 隐藏的canvas用于截取封面 -->
+    <canvas id="thumbCanvas" style="display:none;"></canvas>
+
+    <script src="js/api.js"></script>
+    <script src="js/app.js"></script>
+    <script>
+        let videoFile = null;
+        let thumbBlob = null;
+        let uploadedVideoUrl = '';
+        let uploadedThumbUrl = '';
+        let currentCity = '';
+
+        // 检查登录状态
+        document.addEventListener('DOMContentLoaded', function() {
+            if (!App.checkLogin()) {
+                if (confirm('请先登录')) {
+                    location.href = 'login.html';
+                } else {
+                    history.back();
+                }
+            }
+
+            // 获取位置
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function(pos) {
+                    currentCity = '';
+                }, function() {
+                    currentCity = '';
+                });
+            }
+        });
+
+        function previewVideo(input) {
+            if (input.files && input.files[0]) {
+                videoFile = input.files[0];
+
+                // 检查文件大小
+                if (videoFile.size > 100 * 1024 * 1024) {
+                    App.toast('视频文件不能超过100MB');
+                    input.value = '';
+                    videoFile = null;
+                    return;
+                }
+
+                const video = document.getElementById('videoPreview');
+                video.src = URL.createObjectURL(videoFile);
+                video.style.display = 'block';
+                document.getElementById('uploadIcon').style.display = 'none';
+                document.getElementById('uploadText').style.display = 'none';
+
+                // 视频加载后截取封面
+                video.onloadeddata = function() {
+                    // 跳到1秒位置截取封面
+                    video.currentTime = Math.min(1, video.duration / 2);
+                };
+
+                video.onseeked = function() {
+                    captureThumb(video);
+                };
+
+                video.onerror = function() {
+                    App.toast('视频格式不支持');
+                    resetUpload();
+                };
+            }
+        }
+
+        // 截取视频封面
+        function captureThumb(video) {
+            const canvas = document.getElementById('thumbCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // 设置canvas尺寸
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+
+            // 绘制视频帧
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // 转换为blob
+            canvas.toBlob(function(blob) {
+                thumbBlob = blob;
+
+                // 显示封面预览
+                const thumbImg = document.getElementById('thumbImg');
+                thumbImg.src = URL.createObjectURL(blob);
+                document.getElementById('thumbPreview').style.display = 'block';
+
+                // 启用发布按钮
+                document.getElementById('publishBtn').disabled = false;
+            }, 'image/jpeg', 0.8);
+        }
+
+        function resetUpload() {
+            videoFile = null;
+            thumbBlob = null;
+            document.getElementById('videoPreview').style.display = 'none';
+            document.getElementById('uploadIcon').style.display = 'block';
+            document.getElementById('uploadText').style.display = 'block';
+            document.getElementById('thumbPreview').style.display = 'none';
+            document.getElementById('publishBtn').disabled = true;
+            document.getElementById('videoInput').value = '';
+        }
+
+        function selectLocation() {
+            const loc = prompt('请输入位置', currentCity || '');
+            if (loc !== null) {
+                currentCity = loc;
+                document.getElementById('locationText').textContent = loc || '添加位置';
+            }
+        }
+
+        // 显示进度
+        function showProgress(percent, text) {
+            const overlay = document.getElementById('progressOverlay');
+            overlay.classList.add('show');
+            document.getElementById('progressPercent').textContent = percent + '%';
+            document.getElementById('progressFill').style.width = percent + '%';
+            document.getElementById('progressText').textContent = text;
+        }
+
+        function hideProgress() {
+            document.getElementById('progressOverlay').classList.remove('show');
+        }
+
+        // 上传文件
+        function uploadFile(file, type) {
+            return new Promise((resolve, reject) => {
+                const formData = new FormData();
+                formData.append('file', file);
+                formData.append('type', type);
+                formData.append('token', localStorage.getItem('token') || '');
+                formData.append('uid', localStorage.getItem('uid') || '');
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.upload.onprogress = function(e) {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        if (type === 'video') {
+                            showProgress(Math.round(percent * 0.7), '正在上传视频...');
+                        } else {
+                            showProgress(70 + Math.round(percent * 0.2), '正在上传封面...');
+                        }
+                    }
+                };
+
+                xhr.onload = function() {
+                    console.log('上传响应状态:', xhr.status);
+                    console.log('上传响应内容:', xhr.responseText);
+
+                    if (xhr.status === 0) {
+                        reject(new Error('无法连接到服务器，请确保PHP服务已启动'));
+                        return;
+                    }
+
+                    if (xhr.status !== 200) {
+                        reject(new Error('HTTP错误: ' + xhr.status));
+                        return;
+                    }
+
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        if (res.ret === 200) {
+                            resolve(res.data);
+                        } else {
+                            reject(new Error(res.msg || '上传失败'));
+                        }
+                    } catch (e) {
+                        console.error('JSON解析失败:', e);
+                        console.error('原始响应:', xhr.responseText.substring(0, 500));
+                        // 显示更详细的错误信息
+                        let errMsg = '服务器响应错误';
+                        if (xhr.responseText.includes('<?php') || xhr.responseText.includes('<?=')) {
+                            errMsg = 'PHP未运行，请启动PHP服务器';
+                        } else if (xhr.responseText.includes('<!DOCTYPE') || xhr.responseText.includes('<html')) {
+                            errMsg = '服务器返回HTML而非JSON';
+                        } else if (xhr.responseText.trim() === '') {
+                            errMsg = '服务器返回空响应';
+                        } else if (xhr.responseText.includes('Fatal error') || xhr.responseText.includes('Parse error')) {
+                            errMsg = 'PHP错误: ' + xhr.responseText.substring(0, 200);
+                        }
+                        reject(new Error(errMsg));
+                    }
+                };
+
+                xhr.onerror = function() {
+                    console.error('XHR网络错误');
+                    reject(new Error('网络错误，请检查服务器是否运行'));
+                };
+
+                xhr.open('POST', 'upload.php', true);
+                xhr.send(formData);
+            });
+        }
+
+        async function publish() {
+            if (!videoFile) {
+                App.toast('请先选择视频');
+                return;
+            }
+
+            if (!thumbBlob) {
+                App.toast('封面生成中，请稍候');
+                return;
+            }
+
+            const desc = document.getElementById('desc').value.trim();
+            const btn = document.getElementById('publishBtn');
+            btn.disabled = true;
+
+            try {
+                // 1. 上传视频
+                showProgress(0, '正在上传视频...');
+                const videoRes = await uploadFile(videoFile, 'video');
+                uploadedVideoUrl = videoRes.url;
+
+                // 2. 上传封面
+                showProgress(70, '正在上传封面...');
+                const thumbFile = new File([thumbBlob], 'thumb.jpg', { type: 'image/jpeg' });
+                const thumbRes = await uploadFile(thumbFile, 'image');
+                uploadedThumbUrl = thumbRes.url;
+
+                // 3. 调用发布API
+                showProgress(90, '正在发布...');
+
+                const publishData = {
+                    title: desc || '',
+                    thumb: uploadedThumbUrl,
+                    href: uploadedVideoUrl,
+                    href_w: uploadedVideoUrl,
+                    city: currentCity || '',
+                    lat: '',
+                    lng: '',
+                    music_id: 0,
+                    labelid: 0,
+                    goodsinfo: ''
+                };
+
+                const result = await API.setVideo(publishData);
+
+                showProgress(100, '发布成功！');
+
+                setTimeout(() => {
+                    hideProgress();
+                    App.toast('发布成功，等待审核');
+                    location.href = 'me.html';
+                }, 1000);
+
+            } catch (error) {
+                hideProgress();
+                App.toast(error.message || '发布失败，请重试');
+                btn.disabled = false;
+            }
+        }
+    </script>
+</body>
+</html>

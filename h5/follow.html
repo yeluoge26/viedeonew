@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <title>关注 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page" id="app">
+        <!-- 顶部标题 -->
+        <header class="header" style="background: #000;">
+            <div class="header-btn"></div>
+            <span class="header-title">关注</span>
+            <div class="header-btn"></div>
+        </header>
+
+        <!-- 关注的人的视频列表 -->
+        <div class="content" style="padding-top: 50px;">
+            <div class="video-grid" id="followGrid">
+                <!-- 视频由JS动态加载 -->
+            </div>
+
+            <div class="empty" id="emptyTip" style="display:none;">
+                <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                <span class="text">关注你喜欢的创作者<br>他们的作品会出现在这里</span>
+            </div>
+
+            <div class="loading" id="loading">
+                <div class="loading-spinner"></div>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                </div>
+                <span>首页</span>
+            </a>
+            <a href="follow.html" class="nav-item active">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                </div>
+                <span>关注</span>
+            </a>
+            <div class="nav-publish" onclick="location.href='publish.html'">
+                <svg viewBox="0 0 24 24" fill="#000"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+            <a href="message.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <span>消息</span>
+            </a>
+            <a href="me.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <span>我的</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            loadFollowVideos();
+        });
+
+        function loadFollowVideos() {
+            const grid = document.getElementById('followGrid');
+            const token = localStorage.getItem('token');
+
+            if (!token) {
+                // 未登录显示提示
+                document.getElementById('emptyTip').style.display = 'flex';
+                document.getElementById('loading').style.display = 'none';
+                return;
+            }
+
+            // 模拟关注的人的视频
+            const videos = [];
+            for (let i = 0; i < 8; i++) {
+                videos.push({
+                    id: i + 50,
+                    title: '来自关注创作者的精彩视频',
+                    thumb: 'https://picsum.photos/300/400?random=' + (i + 50),
+                    avatar: 'https://i.pravatar.cc/100?img=' + (i + 50),
+                    nickname: '创作者' + (i + 1),
+                    likes: Math.floor(Math.random() * 10000)
+                });
+            }
+
+            if (videos.length === 0) {
+                document.getElementById('emptyTip').style.display = 'flex';
+            } else {
+                grid.innerHTML = videos.map(v => `
+                    <div class="video-card" onclick="location.href='play.html?id=${v.id}'">
+                        <img class="cover" src="${v.thumb}" alt="">
+                        <div class="info">
+                            <div class="author">
+                                <img class="avatar" src="${v.avatar}" alt="">
+                                <span class="name">@${v.nickname}</span>
+                            </div>
+                            <div class="desc">${v.title}</div>
+                        </div>
+                        <div class="stats">
+                            <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            ${formatNumber(v.likes)}
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            document.getElementById('loading').style.display = 'none';
+        }
+
+        function formatNumber(num) {
+            if (num >= 10000) {
+                return (num / 10000).toFixed(1) + 'w';
+            }
+            return num;
+        }
+    </script>
+</body>
+</html>

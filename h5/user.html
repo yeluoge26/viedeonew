@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>用户主页 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .user-page { background: #000; min-height: 100vh; }
+
+        .user-header {
+            position: relative;
+            height: 200px;
+        }
+        .user-header .bg {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(20px);
+            opacity: 0.6;
+        }
+        .user-header .back-btn {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .user-header .back-btn svg { width: 24px; height: 24px; fill: #fff; }
+        .user-header .more-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 36px;
+            height: 36px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .user-header .more-btn svg { width: 24px; height: 24px; fill: #fff; }
+
+        .user-info {
+            position: relative;
+            padding: 0 15px;
+            margin-top: -60px;
+        }
+        .user-info .avatar {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            border: 3px solid #000;
+            object-fit: cover;
+        }
+        .user-info .name {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        .user-info .uid {
+            font-size: 13px;
+            color: #999;
+            margin-top: 4px;
+        }
+        .user-info .bio {
+            font-size: 14px;
+            color: #ccc;
+            margin-top: 10px;
+            line-height: 1.5;
+        }
+
+        .user-stats {
+            display: flex;
+            padding: 15px;
+            gap: 30px;
+        }
+        .user-stats .stat {
+            text-align: center;
+        }
+        .user-stats .stat .num {
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .user-stats .stat .label {
+            font-size: 12px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        .user-actions {
+            display: flex;
+            padding: 0 15px;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .user-actions .follow-btn {
+            flex: 1;
+            height: 40px;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+        }
+        .user-actions .follow-btn.followed {
+            background: #333;
+            color: #999;
+        }
+        .user-actions .msg-btn {
+            width: 40px;
+            height: 40px;
+            background: #333;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .user-actions .msg-btn svg { width: 20px; height: 20px; fill: #fff; }
+
+        .content-tabs {
+            display: flex;
+            border-bottom: 1px solid #222;
+        }
+        .content-tabs .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #999;
+            position: relative;
+        }
+        .content-tabs .tab.active {
+            color: #fff;
+        }
+        .content-tabs .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 1px;
+        }
+
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2px;
+            padding: 2px;
+        }
+        .video-grid .video-item {
+            position: relative;
+            aspect-ratio: 3/4;
+        }
+        .video-grid .video-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-grid .video-item .plays {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            font-size: 11px;
+            display: flex;
+            align-items: center;
+        }
+        .video-grid .video-item .plays svg {
+            width: 12px;
+            height: 12px;
+            fill: #fff;
+            margin-right: 2px;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        .empty-state svg {
+            width: 60px;
+            height: 60px;
+            fill: #333;
+            margin-bottom: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page page-full user-page">
+        <!-- 头部背景 -->
+        <div class="user-header">
+            <img class="bg" id="userBg" src="" alt="">
+            <div class="back-btn" onclick="history.back()">
+                <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </div>
+            <div class="more-btn" onclick="showMore()">
+                <svg viewBox="0 0 24 24"><path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
+            </div>
+        </div>
+
+        <!-- 用户信息 -->
+        <div class="user-info">
+            <img class="avatar" id="userAvatar" src="" alt="">
+            <div class="name" id="userName"></div>
+            <div class="uid" id="userUid"></div>
+            <div class="bio" id="userBio"></div>
+        </div>
+
+        <!-- 统计数据 -->
+        <div class="user-stats">
+            <div class="stat" onclick="showFollowing()">
+                <div class="num" id="followingCount">0</div>
+                <div class="label">关注</div>
+            </div>
+            <div class="stat" onclick="showFans()">
+                <div class="num" id="fansCount">0</div>
+                <div class="label">粉丝</div>
+            </div>
+            <div class="stat">
+                <div class="num" id="likesCount">0</div>
+                <div class="label">获赞</div>
+            </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="user-actions">
+            <div class="follow-btn" id="followBtn" onclick="toggleFollow()">关注</div>
+            <div class="msg-btn" onclick="goChat()">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+        </div>
+
+        <!-- 内容标签 -->
+        <div class="content-tabs">
+            <div class="tab active" data-type="works" onclick="switchTab(this)">作品</div>
+            <div class="tab" data-type="likes" onclick="switchTab(this)">喜欢</div>
+        </div>
+
+        <!-- 视频列表 -->
+        <div class="video-grid" id="videoGrid"></div>
+    </div>
+
+    <script>
+        let userData = null;
+        let currentTab = 'works';
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const uid = urlParams.get('uid') || 1;
+            loadUserData(uid);
+        });
+
+        // 加载用户数据
+        function loadUserData(uid) {
+            // 模拟用户数据
+            userData = {
+                uid: uid,
+                avatar: 'https://i.pravatar.cc/200?img=' + uid,
+                nickname: '创作者' + uid,
+                bio: '热爱生活，记录美好瞬间✨ 每天分享有趣的视频内容',
+                following: Math.floor(Math.random() * 500),
+                fans: Math.floor(Math.random() * 100000),
+                likes: Math.floor(Math.random() * 500000),
+                isFollowed: false
+            };
+
+            document.getElementById('userBg').src = userData.avatar;
+            document.getElementById('userAvatar').src = userData.avatar;
+            document.getElementById('userName').textContent = userData.nickname;
+            document.getElementById('userUid').textContent = '抖音号: ' + (10000000 + parseInt(uid));
+            document.getElementById('userBio').textContent = userData.bio;
+            document.getElementById('followingCount').textContent = formatNumber(userData.following);
+            document.getElementById('fansCount').textContent = formatNumber(userData.fans);
+            document.getElementById('likesCount').textContent = formatNumber(userData.likes);
+
+            document.title = userData.nickname + ' - TECHSPACE短视频';
+
+            loadVideos();
+        }
+
+        // 加载视频列表
+        function loadVideos() {
+            const grid = document.getElementById('videoGrid');
+            const videos = [];
+
+            const count = currentTab === 'works' ? 18 : 12;
+            for (let i = 0; i < count; i++) {
+                videos.push({
+                    id: i,
+                    thumb: 'https://picsum.photos/300/400?random=' + (i + (currentTab === 'works' ? 900 : 950)),
+                    plays: Math.floor(Math.random() * 100000)
+                });
+            }
+
+            if (videos.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1/-1;">
+                        <svg viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
+                        <div>暂无${currentTab === 'works' ? '作品' : '喜欢的视频'}</div>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = videos.map(v => `
+                <div class="video-item" onclick="location.href='play.html?id=${v.id}'">
+                    <img src="${v.thumb}" alt="">
+                    <div class="plays">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        ${formatNumber(v.plays)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 切换标签
+        function switchTab(tab) {
+            document.querySelectorAll('.content-tabs .tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentTab = tab.dataset.type;
+            loadVideos();
+        }
+
+        // 关注/取消关注
+        function toggleFollow() {
+            const btn = document.getElementById('followBtn');
+            userData.isFollowed = !userData.isFollowed;
+
+            if (userData.isFollowed) {
+                btn.classList.add('followed');
+                btn.textContent = '已关注';
+            } else {
+                btn.classList.remove('followed');
+                btn.textContent = '关注';
+            }
+        }
+
+        // 跳转私信
+        function goChat() {
+            location.href = 'chat.html?uid=' + userData.uid;
+        }
+
+        // 显示关注列表
+        function showFollowing() {
+            alert('关注列表');
+        }
+
+        // 显示粉丝列表
+        function showFans() {
+            alert('粉丝列表');
+        }
+
+        // 显示更多
+        function showMore() {
+            alert('举报/拉黑');
+        }
+
+        // 数字格式化
+        function formatNumber(num) {
+            if (num >= 10000) {
+                return (num / 10000).toFixed(1) + 'w';
+            }
+            return num;
+        }
+    </script>
+</body>
+</html>

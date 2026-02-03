@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <tc_include file="Appapi/Public/head" />
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/appapi/css/shop.css"/> 
+    <title>创建店铺</title>
+</head>
+<body>
+    <div class="apply">
+        <div class="line_t">
+            <span>*</span>店铺图片（用于店铺主页展示）
+        </div>
+        <div class="line_bd line_bd_u1">
+            <ul class="upload clearfix">
+                <li class="square">
+                    <div class="up_img" data-fileid="up_img1">
+                        <if condition="$info">
+                        <img src="{$info['thumb1']}">
+                        <else/>
+                        <img src="__PUBLIC__/appapi/images/upload.png">
+                        </if>
+                        <div class="shadd">
+                            <div class="progress_bd"><div class="progress_sp"></div></div>
+                        </div>
+                        <input type="hidden" class="img_input" name="thumb" id="thumb" value="{$info['thumb']}">
+                        <input type="file" id="up_img1" class="file_input" name="file"  accept="image/*" style="display:none;"/>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="line_t">
+            <span>*</span>店铺名称（最多可输入10个字）
+        </div>
+        <div class="line_bd line_bd_i">
+            <input id="name" maxlength="10" value="{$info['name']}">
+        </div>
+        
+        <div class="line_t">
+            <span>*</span>店铺简介（最多可输入50个字）
+        </div>
+        <div class="line_bd line_bd_t">
+            <textarea id="des" maxlength="50">{$info['des']}</textarea>
+        </div>
+        
+        <div class="line_t">
+            <span></span>店铺联系方式（店铺联系电话）
+        </div>
+        <div class="line_bd line_bd_i">
+            <input id="tel" value="{$info['tel']}">
+        </div>
+
+        <div class="line_bd line_bd_u">
+            <ul class="upload clearfix">
+                <li>
+                    <div class="up_img" data-fileid="up_img2">
+                        <if condition="$info">
+                        <img src="{$info['certificate1']}">
+                        <else/>
+                        <img src="__PUBLIC__/appapi/images/upload.png">
+                        </if>
+                        <div class="shadd">
+                            <div class="progress_bd"><div class="progress_sp"></div></div>
+                        </div>
+                        <input type="hidden" class="img_input" name="certificate" id="certificate" value="{$info['certificate']}">
+                        <input type="file" id="up_img2" class="file_input" name="file"  accept="image/*" style="display:none;"/>
+                    </div>
+                    <div class="up_t">
+                        营业执照
+                    </div>
+                </li>
+                <li>
+                    <div class="up_img" data-fileid="up_img3">
+                        <if condition="$info">
+                        <img src="{$info['license1']}">
+                        <else/>
+                        <img src="__PUBLIC__/appapi/images/upload.png">
+                        </if>
+                        <div class="shadd">
+                            <div class="progress_bd"><div class="progress_sp"></div></div>
+                        </div>
+                        <input type="hidden" class="img_input" name="license" id="license" value="{$info['license']}">
+                        <input type="file" id="up_img3" class="file_input" name="file"  accept="image/*" style="display:none;"/>
+                    </div>
+                    <div class="up_t">
+                        许可证
+                    </div>
+                </li>
+                <li>
+                    <div class="up_img" data-fileid="up_img4">
+                        <if condition="$info">
+                        <img src="{$info['other1']}">
+                        <else/>
+                        <img src="__PUBLIC__/appapi/images/upload.png">
+                        </if>
+                        <div class="shadd">
+                            <div class="progress_bd"><div class="progress_sp"></div></div>
+                        </div>
+                        <input type="hidden" class="img_input" name="other" id="other" value="{$info['other']}">
+                        <input type="file" id="up_img4" class="file_input" name="file"  accept="image/*" style="display:none;"/>
+                    </div>
+                    <div class="up_t">
+                        其他证件
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <if condition="$info">
+            <if condition="$info['status'] neq 0">
+            <div class="apply_btn apply_ok">
+                提交重审
+            </div>
+            <else/>
+            <div class="apply_btn apply_no">
+                信息审核中
+            </div>
+            </if>
+        <else/>
+        <div class="apply_btn apply_ok">
+            申请店铺
+        </div>
+        </if>
+        
+    </div>
+	<script>
+		var uid='{$uid}';
+		var token='{$token}';
+		var status='{$info['status']}';
+        var baseSize = 100;
+        function setRem () {
+            var scale = document.documentElement.clientWidth / 750;
+            document.documentElement.style.fontSize = (baseSize * Math.min(scale, 3)) + 'px';
+        }
+        setRem();
+        window.onresize = function () {
+            setRem();
+        }
+	</script>
+	<tc_include file="Appapi/Public/footer" />
+    <script src="__PUBLIC__/js/ajaxfileupload.js"></script>
+    <script src="__PUBLIC__/appapi/js/shop_apply.js"></script>
+	
+</body>
+</html>

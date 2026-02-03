@@ -1,0 +1,100 @@
+<admintpl file="header" />
+</head>
+<body>
+	<div class="wrap">
+		<ul class="nav nav-tabs">
+			<li ><a href="{:U('Shopapply/index')}">认证申请</a></li>
+			<li class="active"><a >编辑</a></li>
+		</ul>
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Shopapply/edit_post')}">
+		   <input type="hidden" name="uid" value="{$auth['uid']}">
+			<fieldset>
+
+				<div class="control-group">
+					<label class="control-label">会员</label>
+					<div class="controls">
+						<input type="text" name="" value="{$auth['userinfo']['user_nicename']} ( {$auth['uid']} )" readonly>
+						<span class="form-required">*</span>
+					</div>
+				</div>
+                <div class="control-group">
+					<label class="control-label">店铺图片</label>
+					<div class="controls">
+						<input type="hidden" name="thumb"  value="{$auth['thumb']}" readonly>
+						<img src="{$auth['thumb']}" width="135" style="cursor: hand">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">名称</label>
+					<div class="controls">
+						<input type="text" name="name" value="{$auth['name']}" readonly>
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">简介</label>
+					<div class="controls">
+						<input type="text" name="des"  value="{$auth['des']}" readonly>
+						<span class="form-required">*</span>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">联系方式</label>
+					<div class="controls">
+						<input type="text" name="tel"  value="{$auth['tel']}" readonly>
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">营业执照</label>
+					<div class="controls">
+						<input type="hidden" name="certificate"  value="{$auth['certificate']}" readonly>
+						<img src="{$auth['certificate']}" width="135" style="cursor: hand">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">许可证</label>
+					<div class="controls">
+						<input type="hidden" name="license"  value="{$auth['license']}" readonly>
+						<img src="{$auth['license']}" width="135" style="cursor: hand">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">其他证件</label>
+					<div class="controls">
+						<input type="hidden" name="other"  value="{$auth['other']}" readonly>
+						<img src="{$auth['other']}" width="135" style="cursor: hand">
+						<span class="form-required">*</span>
+					</div>
+				</div>
+
+				<div class="control-group">
+					<label class="control-label">审核状态</label>
+					<div class="controls">
+						<label class="radio inline" for="status_2"><input type="radio" name="status" value="2" id="status_2" <if condition="$auth['status'] eq '2'">checked</if>>失败</label>
+						<label class="radio inline" for="status_0"><input type="radio" name="status" value="0" id="status_0" <if condition="$auth['status'] eq '0'">checked</if>>处理中</label>
+						<label class="radio inline" for="status_1"><input type="radio" name="status" value="1" id="status_1" <if condition="$auth['status'] eq '1'">checked</if>>成功</label>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">失败原因</label>
+					<div class="controls">
+						 <textarea name="reason" rows="2" cols="20" id="reason" class="inputtext" style="height: 100px; width: 500px;">{$auth['reason']}</textarea>
+						<span class="form-required">*</span>
+					</div>
+				</div>
+
+			</fieldset>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('EDIT')}</button>
+				<a class="btn" href="{:U('Shopapply/index')}">{:L('BACK')}</a>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>私信 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .chat-page {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            background: #000;
+        }
+
+        .chat-header {
+            display: flex;
+            align-items: center;
+            padding: 10px 15px;
+            background: #000;
+            border-bottom: 1px solid #1a1a1a;
+            padding-top: calc(10px + env(safe-area-inset-top));
+        }
+        .chat-header .back-btn {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+            margin-right: 15px;
+        }
+        .chat-header .user-info {
+            flex: 1;
+            display: flex;
+            align-items: center;
+        }
+        .chat-header .user-info img {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+        .chat-header .user-info .name {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        .chat-header .more-btn {
+            width: 24px;
+            height: 24px;
+            fill: #fff;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            display: flex;
+            align-items: flex-start;
+            max-width: 75%;
+        }
+        .message.sent {
+            align-self: flex-end;
+            flex-direction: row-reverse;
+        }
+        .message img.avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+        .message .bubble {
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 14px;
+            line-height: 1.4;
+            margin: 0 10px;
+        }
+        .message.received .bubble {
+            background: #1a1a1a;
+            color: #fff;
+            border-bottom-left-radius: 4px;
+        }
+        .message.sent .bubble {
+            background: var(--primary-color);
+            color: #fff;
+            border-bottom-right-radius: 4px;
+        }
+        .message .time {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            text-align: center;
+        }
+
+        .time-divider {
+            text-align: center;
+            font-size: 12px;
+            color: #666;
+            padding: 10px 0;
+        }
+
+        .chat-input-area {
+            display: flex;
+            align-items: flex-end;
+            padding: 10px 15px;
+            background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+            gap: 10px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
+        }
+        .chat-input-area .tool-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .chat-input-area .tool-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: #666;
+        }
+        .chat-input-area .input-wrap {
+            flex: 1;
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+        }
+        .chat-input-area .input-wrap input {
+            flex: 1;
+            border: none;
+            background: none;
+            color: #fff;
+            font-size: 14px;
+            outline: none;
+        }
+        .chat-input-area .input-wrap input::placeholder { color: #666; }
+        .chat-input-area .send-btn {
+            width: 60px;
+            height: 36px;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            flex-shrink: 0;
+        }
+        .chat-input-area .send-btn.disabled {
+            background: #333;
+            color: #666;
+        }
+
+        .emoji-panel {
+            display: none;
+            padding: 15px;
+            background: #0a0a0a;
+            border-top: 1px solid #1a1a1a;
+        }
+        .emoji-panel.show { display: block; }
+        .emoji-grid {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            gap: 10px;
+        }
+        .emoji-item {
+            font-size: 24px;
+            text-align: center;
+            padding: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page page-full chat-page">
+        <!-- 头部 -->
+        <div class="chat-header">
+            <svg class="back-btn" viewBox="0 0 24 24" onclick="history.back()">
+                <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+            </svg>
+            <div class="user-info" onclick="goUserPage()">
+                <img id="chatAvatar" src="" alt="">
+                <span class="name" id="chatName"></span>
+            </div>
+            <svg class="more-btn" viewBox="0 0 24 24" onclick="showMore()">
+                <path d="M12 8c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0 2c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm0 6c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+            </svg>
+        </div>
+
+        <!-- 消息列表 -->
+        <div class="chat-messages" id="messageList"></div>
+
+        <!-- 输入区域 -->
+        <div class="chat-input-area">
+            <div class="tool-btn" onclick="toggleEmoji()">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm3.5-9c.83 0 1.5-.67 1.5-1.5S16.33 8 15.5 8 14 8.67 14 9.5s.67 1.5 1.5 1.5zm-7 0c.83 0 1.5-.67 1.5-1.5S9.33 8 8.5 8 7 8.67 7 9.5 7.67 11 8.5 11zm3.5 6.5c2.33 0 4.31-1.46 5.11-3.5H6.89c.8 2.04 2.78 3.5 5.11 3.5z"/></svg>
+            </div>
+            <div class="input-wrap">
+                <input type="text" id="messageInput" placeholder="发送消息..." oninput="onInputChange()">
+            </div>
+            <div class="send-btn disabled" id="sendBtn" onclick="sendMessage()">发送</div>
+        </div>
+
+        <!-- 表情面板 -->
+        <div class="emoji-panel" id="emojiPanel">
+            <div class="emoji-grid" id="emojiGrid"></div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        let chatUser = null;
+        let messages = [];
+        let myAvatar = '';
+
+        // XSS防护：HTML转义函数
+        const escapeHtml = (str) => App && App.escapeHtml ? App.escapeHtml(str) : String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 检查登录状态
+            if (!localStorage.getItem('token')) {
+                sessionStorage.setItem('loginRedirect', location.href);
+                location.href = 'login.html';
+                return;
+            }
+
+            // 获取自己的头像
+            const userInfo = JSON.parse(localStorage.getItem('userInfo') || '{}');
+            myAvatar = userInfo.avatar || 'https://i.pravatar.cc/100?img=1';
+
+            const urlParams = new URLSearchParams(window.location.search);
+            const uid = parseInt(urlParams.get('uid') || urlParams.get('id') || 1);
+            loadChatData(uid);
+            initEmoji();
+
+            // 回车发送
+            document.getElementById('messageInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    sendMessage();
+                }
+            });
+        });
+
+        // 加载聊天数据
+        function loadChatData(uid) {
+            chatUser = {
+                uid: uid,
+                avatar: 'https://i.pravatar.cc/100',
+                nickname: '加载中...'
+            };
+
+            document.getElementById('chatAvatar').src = chatUser.avatar;
+            document.getElementById('chatName').textContent = chatUser.nickname;
+
+            // 先获取用户信息
+            API.getUserInfo(uid)
+                .then(function(data) {
+                    chatUser = {
+                        uid: uid,
+                        avatar: data.avatar || data.avatar_thumb || 'https://i.pravatar.cc/100',
+                        nickname: data.user_nicename || data.nickname || '用户' + uid
+                    };
+                    document.getElementById('chatAvatar').src = chatUser.avatar;
+                    document.getElementById('chatName').textContent = chatUser.nickname;
+                    document.title = chatUser.nickname + ' - 私信';
+                })
+                .catch(function(err) {
+                    console.log('获取用户信息失败:', err);
+                    chatUser.nickname = '用户' + uid;
+                    document.getElementById('chatName').textContent = chatUser.nickname;
+                });
+
+            // 加载聊天记录
+            loadChatHistory(uid);
+        }
+
+        // 加载聊天记录
+        function loadChatHistory(uid) {
+            document.getElementById('messageList').innerHTML = '<div style="text-align:center;padding:20px;color:#666;">加载中...</div>';
+
+            API.getChatRecord(uid, 1)
+                .then(function(data) {
+                    const list = data.list || data || [];
+                    messages = list.map(function(m) {
+                        const myUid = localStorage.getItem('uid');
+                        return {
+                            type: m.uid == myUid ? 'sent' : 'received',
+                            content: m.content || m.message,
+                            time: m.datetime || m.addtime || ''
+                        };
+                    });
+                    renderMessages();
+                })
+                .catch(function(err) {
+                    console.log('获取聊天记录失败:', err);
+                    messages = [];
+                    renderMessages();
+                });
+        }
+
+        // 渲染消息列表
+        function renderMessages() {
+            const list = document.getElementById('messageList');
+
+            if (!messages || messages.length === 0) {
+                list.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">暂无消息，开始聊天吧~</div>';
+                return;
+            }
+
+            list.innerHTML = messages.map(msg => {
+                if (msg.type === 'time') {
+                    return `<div class="time-divider">${escapeHtml(msg.content)}</div>`;
+                }
+
+                const avatar = msg.type === 'sent'
+                    ? escapeHtml(myAvatar)
+                    : escapeHtml(chatUser.avatar);
+
+                return `
+                    <div class="message ${escapeHtml(msg.type)}">
+                        <img class="avatar" src="${avatar}" alt="">
+                        <div class="bubble">${escapeHtml(msg.content)}</div>
+                    </div>
+                `;
+            }).join('');
+
+            // 滚动到底部
+            list.scrollTop = list.scrollHeight;
+        }
+
+        // 初始化表情
+        function initEmoji() {
+            const emojis = ['😀', '😂', '🤣', '😊', '😍', '🥰', '😘', '😜',
+                          '🤔', '😎', '🥺', '😢', '😭', '😤', '🤗', '👍',
+                          '👎', '👏', '🙏', '💪', '❤️', '💔', '🎉', '🔥'];
+
+            document.getElementById('emojiGrid').innerHTML = emojis.map(e => `
+                <div class="emoji-item" onclick="insertEmoji('${e}')">${e}</div>
+            `).join('');
+        }
+
+        // 切换表情面板
+        function toggleEmoji() {
+            document.getElementById('emojiPanel').classList.toggle('show');
+        }
+
+        // 插入表情
+        function insertEmoji(emoji) {
+            const input = document.getElementById('messageInput');
+            input.value += emoji;
+            input.focus();
+            onInputChange();
+        }
+
+        // 输入变化
+        function onInputChange() {
+            const input = document.getElementById('messageInput');
+            const btn = document.getElementById('sendBtn');
+            if (input.value.trim()) {
+                btn.classList.remove('disabled');
+            } else {
+                btn.classList.add('disabled');
+            }
+        }
+
+        // 发送消息
+        function sendMessage() {
+            const input = document.getElementById('messageInput');
+            const content = input.value.trim();
+            if (!content) return;
+
+            const sendBtn = document.getElementById('sendBtn');
+            sendBtn.classList.add('disabled');
+            sendBtn.textContent = '发送中';
+
+            // 调用API发送消息
+            API.sendChat(chatUser.uid, content)
+                .then(function(data) {
+                    // 添加到本地消息列表
+                    messages.push({
+                        type: 'sent',
+                        content: content,
+                        time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+                    });
+
+                    input.value = '';
+                    onInputChange();
+                    renderMessages();
+
+                    // 隐藏表情面板
+                    document.getElementById('emojiPanel').classList.remove('show');
+
+                    sendBtn.textContent = '发送';
+                })
+                .catch(function(err) {
+                    // API失败也添加到本地（离线模式）
+                    messages.push({
+                        type: 'sent',
+                        content: content,
+                        time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit' })
+                    });
+
+                    input.value = '';
+                    onInputChange();
+                    renderMessages();
+
+                    document.getElementById('emojiPanel').classList.remove('show');
+                    sendBtn.textContent = '发送';
+                });
+        }
+
+        // 跳转用户主页
+        function goUserPage() {
+            location.href = 'user.html?uid=' + chatUser.uid;
+        }
+
+        // 显示更多选项
+        function showMore() {
+            alert('清空聊天记录 / 举报');
+        }
+    </script>
+</body>
+</html>

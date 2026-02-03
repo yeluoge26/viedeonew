@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>搜索 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .search-page {
+            padding: 15px;
+            padding-top: calc(15px + env(safe-area-inset-top));
+            padding-bottom: calc(70px + env(safe-area-inset-bottom));
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        .search-bar {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            gap: 10px;
+            position: sticky;
+            top: 0;
+            background: #000;
+            z-index: 10;
+            margin: -15px -15px 0;
+            padding: 10px 15px;
+        }
+        .search-bar .input-wrap {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: #1a1a1a;
+            border-radius: 20px;
+            padding: 10px 15px;
+        }
+        .search-bar .input-wrap svg {
+            width: 20px;
+            height: 20px;
+            fill: #666;
+            margin-right: 8px;
+            flex-shrink: 0;
+        }
+        .search-bar .input-wrap input {
+            flex: 1;
+            border: none;
+            background: none;
+            color: #fff;
+            font-size: 15px;
+            outline: none;
+            min-width: 0;
+        }
+        .search-bar .input-wrap input::placeholder { color: #666; }
+        .search-bar .search-btn {
+            color: var(--primary-color);
+            font-size: 15px;
+            white-space: nowrap;
+            padding: 8px 4px;
+            font-weight: 500;
+        }
+
+        .search-tabs {
+            display: flex;
+            border-bottom: 1px solid #222;
+            margin-bottom: 15px;
+        }
+        .search-tabs .tab {
+            flex: 1;
+            text-align: center;
+            padding: 12px 0;
+            font-size: 14px;
+            color: #999;
+            position: relative;
+        }
+        .search-tabs .tab.active {
+            color: #fff;
+        }
+        .search-tabs .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 2px;
+            background: var(--primary-color);
+            border-radius: 1px;
+        }
+
+        .hot-search {
+            margin-bottom: 20px;
+        }
+        .hot-search .title {
+            font-size: 16px;
+            font-weight: 500;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .hot-search .title svg {
+            width: 20px;
+            height: 20px;
+            fill: #ff6b6b;
+            margin-right: 6px;
+        }
+        .hot-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .hot-item {
+            display: flex;
+            align-items: center;
+            padding: 8px 12px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            font-size: 13px;
+        }
+        .hot-item .rank {
+            font-weight: bold;
+            margin-right: 8px;
+            min-width: 16px;
+        }
+        .hot-item .rank.top1 { color: #ff4757; }
+        .hot-item .rank.top2 { color: #ff6b6b; }
+        .hot-item .rank.top3 { color: #ffa502; }
+        .hot-item .hot-icon {
+            width: 14px;
+            height: 14px;
+            fill: #ff6b6b;
+            margin-left: 4px;
+        }
+
+        .history-section {
+            margin-bottom: 20px;
+        }
+        .history-section .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        .history-section .header .title { font-size: 16px; font-weight: 500; }
+        .history-section .header .clear {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            align-items: center;
+        }
+        .history-section .header .clear svg {
+            width: 16px;
+            height: 16px;
+            fill: #666;
+            margin-right: 4px;
+        }
+        .history-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .history-tag {
+            padding: 6px 12px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            font-size: 13px;
+            color: #999;
+        }
+
+        .search-results { display: none; }
+        .search-results.show { display: block; }
+
+        .video-results {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+        .video-result {
+            position: relative;
+            aspect-ratio: 3/4;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .video-result img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        .video-result .plays {
+            position: absolute;
+            bottom: 8px;
+            left: 8px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+        }
+        .video-result .plays svg {
+            width: 14px;
+            height: 14px;
+            fill: #fff;
+            margin-right: 4px;
+        }
+
+        /* 移动端适配优化 */
+        @media screen and (max-width: 375px) {
+            .hot-item { padding: 6px 10px; font-size: 12px; }
+            .history-tag { padding: 5px 10px; font-size: 12px; }
+            .search-bar .input-wrap { padding: 8px 12px; }
+            .search-bar .input-wrap input { font-size: 14px; }
+        }
+
+        @media screen and (min-width: 414px) {
+            .video-results { gap: 10px; }
+            .hot-list { gap: 12px; }
+        }
+
+        /* 用户结果优化 */
+        .user-result {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #1a1a1a;
+        }
+        .user-result img {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+        .user-result .info {
+            flex: 1;
+            min-width: 0;
+        }
+        .user-result .info .name {
+            font-size: 15px;
+            margin-bottom: 4px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .user-result .info .fans { font-size: 12px; color: #999; }
+        .user-result .follow-btn {
+            padding: 6px 16px;
+            background: var(--primary-color);
+            color: #fff;
+            border-radius: 4px;
+            font-size: 13px;
+            flex-shrink: 0;
+            margin-left: 10px;
+        }
+        .user-result .follow-btn.followed {
+            background: #333;
+            color: #999;
+        }
+
+        /* 滚动容器 */
+        .search-content {
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+    </style>
+</head>
+<body>
+    <div class="page page-full search-page">
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <div class="input-wrap">
+                <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+                <input type="text" id="searchInput" placeholder="搜索视频、用户" oninput="onSearchInput()">
+                <svg class="clear-btn" viewBox="0 0 24 24" onclick="clearInput()" style="display:none;width:18px;height:18px;fill:#666;margin-left:8px;">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+            </div>
+            <div class="search-btn" onclick="doSearch()">搜索</div>
+        </div>
+
+        <!-- 搜索结果标签 -->
+        <div class="search-tabs" id="searchTabs" style="display: none;">
+            <div class="tab active" data-type="video" onclick="switchTab(this)">视频</div>
+            <div class="tab" data-type="user" onclick="switchTab(this)">用户</div>
+        </div>
+
+        <!-- 默认内容 -->
+        <div id="defaultContent">
+            <!-- 热门搜索 -->
+            <div class="hot-search">
+                <div class="title">
+                    <svg viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67zM11.71 19c-1.78 0-3.22-1.4-3.22-3.14 0-1.62 1.05-2.76 2.81-3.12 1.77-.36 3.6-1.21 4.62-2.58.39 1.29.59 2.65.59 4.04 0 2.65-2.15 4.8-4.8 4.8z"/></svg>
+                    热门搜索
+                </div>
+                <div class="hot-list" id="hotList"></div>
+            </div>
+
+            <!-- 搜索历史 -->
+            <div class="history-section" id="historySection">
+                <div class="header">
+                    <span class="title">搜索历史</span>
+                    <div class="clear" onclick="clearHistory()">
+                        <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                        清空
+                    </div>
+                </div>
+                <div class="history-tags" id="historyTags"></div>
+            </div>
+        </div>
+
+        <!-- 搜索结果 -->
+        <div class="search-results" id="searchResults">
+            <div id="videoResults" class="video-results"></div>
+            <div id="userResults" style="display: none;"></div>
+        </div>
+
+        <!-- 底部导航 -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                </div>
+                <span>首页</span>
+            </a>
+            <a href="follow.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3z"/></svg>
+                </div>
+                <span>关注</span>
+            </a>
+            <div class="nav-publish" onclick="location.href='publish.html'">
+                <svg viewBox="0 0 24 24" fill="#000"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+            <a href="message.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <span>消息</span>
+            </a>
+            <a href="me.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <span>我的</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        let searchHistory = JSON.parse(localStorage.getItem('searchHistory') || '[]');
+        let currentType = 'video';
+        let currentKeyword = '';
+
+        // XSS防护：HTML转义函数
+        const escapeHtml = (str) => App && App.escapeHtml ? App.escapeHtml(str) : String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+        document.addEventListener('DOMContentLoaded', function() {
+            loadHotSearch();
+            loadHistory();
+
+            // 回车搜索
+            document.getElementById('searchInput').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    doSearch();
+                }
+            });
+        });
+
+        // 加载热门搜索
+        function loadHotSearch() {
+            const hotList = document.getElementById('hotList');
+            const hotWords = [
+                '春节祝福', '搞笑视频', '美食教程', '舞蹈挑战',
+                '旅行vlog', '宠物日常', '健身打卡', '穿搭分享',
+                '音乐推荐', '剧情反转'
+            ];
+
+            hotList.innerHTML = hotWords.map((word, index) => {
+                let rankClass = '';
+                if (index === 0) rankClass = 'top1';
+                else if (index === 1) rankClass = 'top2';
+                else if (index === 2) rankClass = 'top3';
+
+                return `
+                    <div class="hot-item" onclick="searchKeyword('${escapeHtml(word)}')">
+                        <span class="rank ${rankClass}">${index + 1}</span>
+                        <span>${escapeHtml(word)}</span>
+                        ${index < 3 ? '<svg class="hot-icon" viewBox="0 0 24 24"><path d="M13.5.67s.74 2.65.74 4.8c0 2.06-1.35 3.73-3.41 3.73-2.07 0-3.63-1.67-3.63-3.73l.03-.36C5.21 7.51 4 10.62 4 14c0 4.42 3.58 8 8 8s8-3.58 8-8C20 8.61 17.41 3.8 13.5.67z"/></svg>' : ''}
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 加载搜索历史
+        function loadHistory() {
+            const section = document.getElementById('historySection');
+            const tags = document.getElementById('historyTags');
+
+            if (searchHistory.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            tags.innerHTML = searchHistory.map(h => `
+                <div class="history-tag" onclick="searchKeyword('${escapeHtml(h)}')">${escapeHtml(h)}</div>
+            `).join('');
+        }
+
+        // 清空历史
+        function clearHistory() {
+            searchHistory = [];
+            localStorage.removeItem('searchHistory');
+            loadHistory();
+        }
+
+        // 搜索关键词
+        function searchKeyword(keyword) {
+            document.getElementById('searchInput').value = keyword;
+            doSearch();
+        }
+
+        // 输入时处理
+        function onSearchInput() {
+            const input = document.getElementById('searchInput');
+            const clearBtn = document.querySelector('.clear-btn');
+            if (input.value.trim()) {
+                clearBtn.style.display = 'block';
+            } else {
+                clearBtn.style.display = 'none';
+                showDefault();
+            }
+        }
+
+        // 清空输入
+        function clearInput() {
+            const input = document.getElementById('searchInput');
+            input.value = '';
+            document.querySelector('.clear-btn').style.display = 'none';
+            showDefault();
+            input.focus();
+        }
+
+        // 显示默认内容
+        function showDefault() {
+            document.getElementById('defaultContent').style.display = 'block';
+            document.getElementById('searchResults').classList.remove('show');
+            document.getElementById('searchTabs').style.display = 'none';
+        }
+
+        // 执行搜索
+        function doSearch() {
+            const input = document.getElementById('searchInput');
+            const keyword = input.value.trim();
+            if (!keyword) return;
+
+            // 保存搜索历史
+            if (!searchHistory.includes(keyword)) {
+                searchHistory.unshift(keyword);
+                if (searchHistory.length > 10) searchHistory.pop();
+                localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+                loadHistory();
+            }
+
+            // 显示搜索结果
+            document.getElementById('defaultContent').style.display = 'none';
+            document.getElementById('searchResults').classList.add('show');
+            document.getElementById('searchTabs').style.display = 'flex';
+
+            loadResults(keyword);
+        }
+
+        // 切换标签
+        function switchTab(tab) {
+            document.querySelectorAll('.search-tabs .tab').forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentType = tab.dataset.type;
+
+            document.getElementById('videoResults').style.display = currentType === 'video' ? 'grid' : 'none';
+            document.getElementById('userResults').style.display = currentType === 'user' ? 'block' : 'none';
+        }
+
+        // 加载搜索结果
+        function loadResults(keyword) {
+            currentKeyword = keyword;
+
+            // 显示加载中
+            document.getElementById('videoResults').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#666;">搜索中...</div>';
+            document.getElementById('userResults').innerHTML = '<div style="text-align:center;padding:20px;color:#666;">搜索中...</div>';
+
+            // 搜索视频
+            API.searchVideo(keyword, 1)
+                .then(function(data) {
+                    const videos = (data.list || data || []).map(v => ({
+                        id: v.id,
+                        thumb: v.thumb || v.thumb_s,
+                        plays: v.views || v.view_num || 0
+                    }));
+                    renderVideoResults(videos);
+                })
+                .catch(function(err) {
+                    console.log('搜索视频失败:', err);
+                    document.getElementById('videoResults').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#666;">暂无相关视频</div>';
+                });
+
+            // 搜索用户
+            API.searchUser(keyword, 1)
+                .then(function(data) {
+                    const users = (data.list || data || []).map(u => ({
+                        id: u.id,
+                        avatar: u.avatar || u.avatar_thumb,
+                        nickname: u.user_nicename || u.nickname,
+                        fans: u.fans || 0,
+                        isFollowed: u.isattention == 1
+                    }));
+                    renderUserResults(users);
+                })
+                .catch(function(err) {
+                    console.log('搜索用户失败:', err);
+                    document.getElementById('userResults').innerHTML = '<div style="text-align:center;padding:20px;color:#666;">暂无相关用户</div>';
+                });
+        }
+
+        // 渲染视频搜索结果
+        function renderVideoResults(videos) {
+            const container = document.getElementById('videoResults');
+
+            if (!videos || videos.length === 0) {
+                container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:20px;color:#666;">暂无相关视频</div>';
+                return;
+            }
+
+            container.innerHTML = videos.map(v => `
+                <div class="video-result" onclick="location.href='play.html?id=${parseInt(v.id)}'">
+                    <img src="${escapeHtml(v.thumb)}" alt="">
+                    <div class="plays">
+                        <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                        ${formatNumber(v.plays)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染用户搜索结果
+        function renderUserResults(users) {
+            const container = document.getElementById('userResults');
+
+            if (!users || users.length === 0) {
+                container.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">暂无相关用户</div>';
+                return;
+            }
+
+            container.innerHTML = users.map(u => `
+                <div class="user-result" onclick="location.href='user.html?uid=${parseInt(u.id)}'">
+                    <img src="${escapeHtml(u.avatar)}" alt="">
+                    <div class="info">
+                        <div class="name">${escapeHtml(u.nickname)}</div>
+                        <div class="fans">${formatNumber(u.fans)} 粉丝</div>
+                    </div>
+                    <div class="follow-btn ${u.isFollowed ? 'followed' : ''}" onclick="event.stopPropagation();toggleFollow(this, ${parseInt(u.id)})">
+                        ${u.isFollowed ? '已关注' : '关注'}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 关注/取消关注
+        function toggleFollow(btn, uid) {
+            // 调用API
+            API.setAttention(uid)
+                .then(function(data) {
+                    if (btn.classList.contains('followed')) {
+                        btn.classList.remove('followed');
+                        btn.textContent = '关注';
+                    } else {
+                        btn.classList.add('followed');
+                        btn.textContent = '已关注';
+                    }
+                })
+                .catch(function(err) {
+                    // API失败也切换状态
+                    if (btn.classList.contains('followed')) {
+                        btn.classList.remove('followed');
+                        btn.textContent = '关注';
+                    } else {
+                        btn.classList.add('followed');
+                        btn.textContent = '已关注';
+                    }
+                });
+        }
+
+        // 数字格式化
+        function formatNumber(num) {
+            if (num >= 10000) {
+                return (num / 10000).toFixed(1) + 'w';
+            }
+            return num;
+        }
+    </script>
+</body>
+</html>

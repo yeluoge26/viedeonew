@@ -1,0 +1,145 @@
+body{
+    background:#ffffff;
+}
+.agent{
+    padding-bottom:1.4rem;
+}
+.agent .top{
+    height:8.51rem;
+    background:url('../images/agent/top_bg.png') no-repeat center center;
+    background-size:contain;
+}
+.agent .top .top_img{
+    padding-top:0.48rem;
+    text-align:center;
+}
+.agent .top .top_img img{
+    width:5.76rem;
+}
+.agent .top .top_tips{
+    margin:0.22rem auto 0;
+    padding-top:0.1rem;
+    width:6.9rem;
+    height:2.7rem;
+    border-radius:0.2rem;
+    background:#A753F6;
+}
+.agent .top .top_tips .tips_bd{
+    position:relative;
+    margin:0 auto;
+    padding:0.82rem 0.44rem 0 0.33rem; 
+    width:6.7rem;
+    height:2.6rem;
+    border-radius:0.2rem;
+    background:#ffffff;
+    -moz-box-sizing: border-box;  /*Firefox3.5+*/
+	-webkit-box-sizing: border-box; /*Safari3.2+*/
+	-o-box-sizing: border-box; /*Opera9.6*/
+	-ms-box-sizing: border-box; /*IE8*/
+	box-sizing: border-box;      
+}
+.agent .top .top_tips .tips_bd .tips_label{
+    position:absolute;
+    top:0.1rem;
+    left:-0.1rem;
+    width:1.40rem;
+    height:0.50rem;
+    line-height:0.5rem;
+    text-align:center;
+    color:#fff;
+    font-size:0.2rem;
+    font-weight:400;
+    border-radius:0 0.25rem 0.25rem 0;
+    background: -webkit-linear-gradient(right,#FF54F5, #FF33D1); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(right,#FF54F5, #FF33D1); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(right,#FF54F5, #FF33D1); /* Firefox 3.6 - 15 */
+    background: linear-gradient(to right,#FF54F5, #FF33D1); /* 标准的语法 */
+}
+.agent .top .top_tips .tips_bd ul{}
+.agent .top .top_tips .tips_bd ul li{
+    position:relative;
+    padding-left:0.35rem;
+    line-height:0.3rem;
+    color:#646464;
+    font-size:0.24rem
+}
+.agent .top .top_tips .tips_bd ul li .li_n{
+    position:absolute;
+    top:0;
+    left:0;
+    width:0.35rem;
+}
+.agent .top .top_tips .tips_bd ul li .li_i{
+
+}
+.agent .info{
+    padding:0.35rem 0 0.3rem 0;
+}
+.agent .info .info_p{
+    float:left;
+    width:33%;
+    height:1rem;
+    border-left:1px solid #eee;
+    -moz-box-sizing: border-box;  /*Firefox3.5+*/
+	-webkit-box-sizing: border-box; /*Safari3.2+*/
+	-o-box-sizing: border-box; /*Opera9.6*/
+	-ms-box-sizing: border-box; /*IE8*/
+	box-sizing: border-box;    
+}
+.agent .info .info_p:first-child{
+    border-left:none;
+}
+.agent .info .info_p .info_p_t{
+    height:0.5rem;
+    line-height:0.5rem;
+    text-align:center;
+    color:#646464;
+    font-size:0.26rem;
+}
+.agent .info .info_p .info_p_bd{
+    height:0.5rem;
+    line-height:0.5rem;
+    text-align:center;
+    color:#323232;
+    font-size:0.32rem;
+    font-weight:500;
+}
+.agent .info .info_p .info_p_bd .score{
+    width:0.32rem;
+    height:0.32rem;
+}
+.agent .cash{
+    padding-bottom:0.28rem;
+    height:0.3rem;
+    line-height:0.3rem;
+    text-align:center;
+    color:#8141E3;
+    font-size:0.20rem;
+}
+.agent .share{
+    position:fixed;
+    left:0;
+    bottom:0;
+    padding:0.24rem 0.3rem;
+    width:100%;
+    height:1.4rem;
+    background:#8141E3;
+    
+    -moz-box-sizing: border-box;  /*Firefox3.5+*/
+	-webkit-box-sizing: border-box; /*Safari3.2+*/
+	-o-box-sizing: border-box; /*Opera9.6*/
+	-ms-box-sizing: border-box; /*IE8*/
+	box-sizing: border-box;
+}
+.agent .share .share_btn{
+    width:6.9rem;
+    height:0.92rem;
+    line-height:0.92rem;
+    text-align:center;
+    color:#fff;
+    font-size:0.34rem;
+    background: -webkit-linear-gradient(#E78488, #DB546C); /* Safari 5.1 - 6.0 */
+    background: -o-linear-gradient(#E78488, #DB546C); /* Opera 11.1 - 12.0 */
+    background: -moz-linear-gradient(#E78488, #DB546C); /* Firefox 3.6 - 15 */
+    background: linear-gradient(#E78488, #DB546C); /* 标准的语法 */
+}

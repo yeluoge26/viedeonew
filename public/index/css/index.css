@@ -1,0 +1,51 @@
+body, p, a, span, i, em, strong, img, strong, span, div, h1, h2, h3, h4, h5, h6, section, ul, li, header, footer, nav { color:#9E9D9D;margin: 0;padding: 0;font-weight: normal; }
+body { font:normal normal 14px Arial,Helvetica,'微软雅黑','黑体';background-color: #f5f5f5;color: #666;line-height:22px;min-width:320px;max-width: 100%;margin:0 auto;}
+img { border:0;}
+p { text-align: justify;}
+strong { color: #F4629C;}
+a { text-decoration: none; }
+.pr { position: relative;top:40px}
+
+body { background: url("../images/pc.jpg") no-repeat center 0;}
+.content { width: 1000px;margin:0px auto;min-height: 721px;}
+.c-1 { margin-top: 100px;width: 404px;}
+.c-2 { display: block;margin:30px 0 10px;}
+
+.footer-copy { color: #fff; text-align: center;margin-top: 30px;width: 100%;
+position: absolute;
+bottom: 0px;
+}
+.footer-nav a { padding:0 15px;color: #fff;}
+
+.c-5 {   
+	position: absolute;
+	left: 460px;
+	top: 310px;
+	width: 200px;
+	height: 200px;
+  }
+.pr .logo{
+	position: absolute;
+	top: 65px;
+	left: 25px;
+}
+.pr .shouji{
+	position: absolute;
+	top: 135px;
+	left: 0px;
+}
+.pr .ios{
+	position: absolute;
+	top: 140px;
+	right: 24px;
+}
+.pr .android{
+	position: absolute;
+	top: 400px;
+	right: 45px;
+}
+.pr .text{
+	position: absolute;
+	top: 190px;
+	right: 40px;
+}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <title>{$config['sitename']}</title>
+</head>
+<body>
+<div class="reg">
+    <form name="form" method="post">
+        开始时间： <input type="text" name="start" value="{$start}"> 格式：2019-05-28 <br>
+        结束时间： <input type="text" name="end"  value="{$end}"> 格式：2019-05-28 <br>
+        例：查询2019-05-27 的数据  开始时间：2019-05-27    结束时间：2019-05-27 <br>
+            查询 27、28两天的数据  开始时间：2019-05-27    结束时间：2019-05-28 <br>
+            
+            <input type="submit" value="查询">
+    </form>
+    <br>
+    <br>
+    <br>
+    <div class="list">
+        <volist name="lists" id="v">
+            {$v['user_login']} -- {$v['user_nicename']}  --  {$v['create_time']} <br>
+        </volist>
+    </div>
+
+</div>
+
+</body>
+</html>

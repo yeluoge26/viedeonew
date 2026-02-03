@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>新粉丝 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .msg-page { padding: 60px 15px 30px; }
+        .fan-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #222;
+        }
+        .fan-item img { width: 48px; height: 48px; border-radius: 50%; margin-right: 12px; }
+        .fan-info { flex: 1; }
+        .fan-info .name { font-size: 15px; margin-bottom: 4px; }
+        .fan-info .time { font-size: 12px; color: #666; }
+        .follow-btn {
+            padding: 6px 16px;
+            border-radius: 4px;
+            font-size: 13px;
+            border: none;
+        }
+        .follow-btn.active { background: var(--primary-color); color: #fff; }
+        .follow-btn.done { background: #333; color: #999; }
+    </style>
+</head>
+<body>
+    <div class="page page-full">
+        <div class="header" style="background: #000;">
+            <div class="header-btn" onclick="history.back()">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </div>
+            <span class="header-title">新粉丝</span>
+            <div class="header-btn"></div>
+        </div>
+
+        <div class="msg-page" id="fansList"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const list = document.getElementById('fansList');
+            const fans = [];
+            for (let i = 0; i < 15; i++) {
+                fans.push({
+                    id: i,
+                    avatar: 'https://i.pravatar.cc/100?img=' + (40 + i),
+                    nickname: '用户' + (300 + i),
+                    time: Math.floor(Math.random() * 24) + '小时前',
+                    followed: Math.random() > 0.5
+                });
+            }
+
+            list.innerHTML = fans.map(f => `
+                <div class="fan-item">
+                    <img src="${f.avatar}" alt="">
+                    <div class="fan-info">
+                        <div class="name">${f.nickname}</div>
+                        <div class="time">${f.time}关注了你</div>
+                    </div>
+                    <button class="follow-btn ${f.followed ? 'done' : 'active'}" onclick="toggleFollow(this)">${f.followed ? '已关注' : '回关'}</button>
+                </div>
+            `).join('');
+        });
+
+        function toggleFollow(btn) {
+            if (btn.classList.contains('active')) {
+                btn.classList.remove('active');
+                btn.classList.add('done');
+                btn.textContent = '已关注';
+            } else {
+                btn.classList.remove('done');
+                btn.classList.add('active');
+                btn.textContent = '回关';
+            }
+        }
+    </script>
+</body>
+</html>

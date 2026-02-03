@@ -1,0 +1,40 @@
+body{
+    background:#15102C;
+}
+.list{
+    padding: 0 0.3rem;
+}
+.list ul{}
+.list ul li{
+    height:1.42rem;
+    border-bottom:1px solid rgba(245,245,245,0.1);
+}
+.list ul li p{
+    line-height:30px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.list ul li .list_l{
+    float:left;
+    width:50%;
+}
+.list ul li .list_l p.money{
+    color:#FB483A;
+    font-size:0.3rem;
+    line-height:1.42rem;
+}
+.list ul li .list_l p span{
+    margin-right:0.05rem;
+}
+
+.list ul li .list_r{
+    float:right;
+    width:50%;
+}
+.list ul li .list_r p{
+    text-align:right;
+    color:#8B8B8B;
+    font-size:0.2rem;
+    line-height:0.71rem;
+}

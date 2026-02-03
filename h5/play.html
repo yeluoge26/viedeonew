@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <title>视频播放 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .swiper-container {
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .swiper-slide {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="page page-full">
+        <!-- 返回按钮 -->
+        <div class="header" style="background: transparent;">
+            <div class="header-btn" onclick="history.back()">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff">
+                    <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- 视频滑动容器 -->
+        <div class="swiper-container" id="videoSwiper">
+            <!-- 视频项由JS动态生成 -->
+        </div>
+
+        <!-- 评论弹窗 -->
+        <div class="overlay" id="commentOverlay" onclick="closeComment()"></div>
+        <div class="comment-modal" id="commentModal">
+            <div class="comment-header">
+                <span class="title"><span id="commentCount">0</span> 条评论</span>
+                <div class="close" onclick="closeComment()">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="#fff">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="comment-list" id="commentList">
+                <!-- 评论项由JS动态生成 -->
+            </div>
+            <div class="comment-input">
+                <input type="text" id="commentInput" placeholder="留下你的精彩评论">
+                <div class="send" onclick="sendComment()">发送</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/app.js"></script>
+    <script src="js/api.js"></script>
+    <script>
+        let currentVideoIndex = 0;
+        let videos = [];
+        let startY = 0;
+        let currentY = 0;
+
+        // XSS防护：HTML转义函数
+        const escapeHtml = (str) => App.escapeHtml ? App.escapeHtml(str) : String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // 获取URL参数中的视频ID
+            const urlParams = new URLSearchParams(window.location.search);
+            const videoId = urlParams.get('id') || 1;
+
+            // 加载视频列表
+            loadVideos(videoId);
+        });
+
+        // 加载视频数据
+        function loadVideos(startId) {
+            // 先尝试从API获取指定视频
+            API.getVideo(startId)
+                .then(function(data) {
+                    // 成功获取视频详情
+                    const videoData = data.video || data;
+                    videos = [{
+                        id: videoData.id,
+                        title: videoData.title || '',
+                        video_url: videoData.href || videoData.video_url,
+                        thumb: videoData.thumb || videoData.thumb_s,
+                        avatar: videoData.avatar || videoData.userinfo?.avatar || 'https://i.pravatar.cc/100',
+                        nickname: videoData.user_nicename || videoData.userinfo?.user_nicename || '用户',
+                        uid: videoData.uid || videoData.userinfo?.id,
+                        likes: videoData.likes || videoData.like_num || 0,
+                        comments: videoData.comments || videoData.comment_num || 0,
+                        shares: videoData.shares || videoData.share_num || 0,
+                        isLiked: videoData.islike == 1,
+                        isFollowed: videoData.isattention == 1
+                    }];
+
+                    // 然后加载更多推荐视频
+                    loadMoreVideos();
+                })
+                .catch(function(err) {
+                    console.log('获取视频详情失败，加载推荐列表:', err);
+                    // 直接加载推荐视频列表
+                    loadRecommendVideos();
+                });
+        }
+
+        // 加载更多视频
+        function loadMoreVideos() {
+            API.getRecommendVideos(1)
+                .then(function(data) {
+                    const list = data.list || data || [];
+                    list.forEach(function(v) {
+                        // 避免重复
+                        if (!videos.find(x => x.id == v.id)) {
+                            videos.push({
+                                id: v.id,
+                                title: v.title || '',
+                                video_url: v.href || v.video_url,
+                                thumb: v.thumb || v.thumb_s,
+                                avatar: v.avatar || v.userinfo?.avatar || 'https://i.pravatar.cc/100',
+                                nickname: v.user_nicename || v.userinfo?.user_nicename || '用户',
+                                uid: v.uid || v.userinfo?.id,
+                                likes: v.likes || v.like_num || 0,
+                                comments: v.comments || v.comment_num || 0,
+                                shares: v.shares || v.share_num || 0,
+                                isLiked: v.islike == 1,
+                                isFollowed: v.isattention == 1
+                            });
+                        }
+                    });
+                    renderVideos();
+                    initSwipe();
+                })
+                .catch(function() {
+                    renderVideos();
+                    initSwipe();
+                });
+        }
+
+        // 加载推荐视频列表
+        function loadRecommendVideos() {
+            API.getRecommendVideos(1)
+                .then(function(data) {
+                    const list = data.list || data || [];
+                    videos = list.map(function(v) {
+                        return {
+                            id: v.id,
+                            title: v.title || '',
+                            video_url: v.href || v.video_url,
+                            thumb: v.thumb || v.thumb_s,
+                            avatar: v.avatar || v.userinfo?.avatar || 'https://i.pravatar.cc/100',
+                            nickname: v.user_nicename || v.userinfo?.user_nicename || '用户',
+                            uid: v.uid || v.userinfo?.id,
+                            likes: v.likes || v.like_num || 0,
+                            comments: v.comments || v.comment_num || 0,
+                            shares: v.shares || v.share_num || 0,
+                            isLiked: v.islike == 1,
+                            isFollowed: v.isattention == 1
+                        };
+                    });
+                    if (videos.length === 0) {
+                        loadDemoVideos();
+                    } else {
+                        renderVideos();
+                        initSwipe();
+                    }
+                })
+                .catch(function(err) {
+                    console.log('获取推荐视频失败:', err);
+                    loadDemoVideos();
+                });
+        }
+
+        // 加载演示数据（API失败时的fallback）
+        function loadDemoVideos() {
+            videos = [];
+            for (let i = 0; i < 5; i++) {
+                videos.push({
+                    id: i + 1,
+                    title: '这是一个精彩的短视频内容 #热门话题 #推荐',
+                    video_url: 'https://www.w3schools.com/html/mov_bbb.mp4',
+                    thumb: 'https://picsum.photos/400/700?random=' + i,
+                    avatar: 'https://i.pravatar.cc/100?img=' + i,
+                    nickname: '创作者' + i,
+                    uid: 1000 + i,
+                    likes: Math.floor(Math.random() * 50000),
+                    comments: Math.floor(Math.random() * 1000),
+                    shares: Math.floor(Math.random() * 500),
+                    isLiked: false,
+                    isFollowed: false
+                });
+            }
+            renderVideos();
+            initSwipe();
+        }
+
+        // 渲染视频列表
+        function renderVideos() {
+            const container = document.getElementById('videoSwiper');
+            container.innerHTML = videos.map((v, index) => `
+                <div class="swiper-slide video-wrapper" data-index="${index}" style="display: ${index === 0 ? 'block' : 'none'}">
+                    <video
+                        id="video_${index}"
+                        src="${v.video_url}"
+                        poster="${v.thumb}"
+                        loop
+                        playsinline
+                        webkit-playsinline
+                        x5-video-player-type="h5"
+                        x5-video-player-fullscreen="true"
+                        onclick="togglePlay(${index})"
+                    ></video>
+
+                    <!-- 播放按钮 -->
+                    <div class="play-btn" id="playBtn_${index}" style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);display:none;">
+                        <svg viewBox="0 0 24 24" width="80" height="80" fill="rgba(255,255,255,0.8)">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                    </div>
+
+                    <!-- 右侧操作栏 -->
+                    <div class="video-actions">
+                        <div class="action-avatar" onclick="goUserHome(${v.uid})">
+                            <img src="${v.avatar}" alt="">
+                            ${!v.isFollowed ? '<div class="follow"><svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg></div>' : ''}
+                        </div>
+
+                        <div class="action-item" onclick="toggleLike(${index})">
+                            <div class="icon ${v.isLiked ? 'liked' : ''}" id="likeIcon_${index}">
+                                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                            </div>
+                            <span class="count" id="likeCount_${index}">${formatNumber(v.likes)}</span>
+                        </div>
+
+                        <div class="action-item" onclick="openComment(${index})">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24"><path d="M21.99 4c0-1.1-.89-2-1.99-2H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14l4 4-.01-18z"/></svg>
+                            </div>
+                            <span class="count">${formatNumber(v.comments)}</span>
+                        </div>
+
+                        <div class="action-item" onclick="shareVideo(${index})">
+                            <div class="icon">
+                                <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+                            </div>
+                            <span class="count">${formatNumber(v.shares)}</span>
+                        </div>
+
+                        <div class="music-disc">
+                            <img src="${v.avatar}" alt="">
+                        </div>
+                    </div>
+
+                    <!-- 底部信息 -->
+                    <div class="video-info">
+                        <div class="video-author" onclick="goUserHome(${parseInt(v.uid)})">@${escapeHtml(v.nickname)}</div>
+                        <div class="video-desc">${escapeHtml(v.title)}</div>
+                        <div class="video-music">
+                            <svg viewBox="0 0 24 24"><path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/></svg>
+                            <span>原创音乐 - ${escapeHtml(v.nickname)}</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+
+            // 自动播放第一个视频
+            playVideo(0);
+        }
+
+        // 初始化滑动
+        function initSwipe() {
+            const container = document.getElementById('videoSwiper');
+
+            container.addEventListener('touchstart', function(e) {
+                startY = e.touches[0].clientY;
+            });
+
+            container.addEventListener('touchmove', function(e) {
+                currentY = e.touches[0].clientY;
+            });
+
+            container.addEventListener('touchend', function(e) {
+                const diff = startY - currentY;
+                if (Math.abs(diff) > 50) {
+                    if (diff > 0 && currentVideoIndex < videos.length - 1) {
+                        // 上滑，下一个视频
+                        switchVideo(currentVideoIndex + 1);
+                    } else if (diff < 0 && currentVideoIndex > 0) {
+                        // 下滑，上一个视频
+                        switchVideo(currentVideoIndex - 1);
+                    }
+                }
+            });
+        }
+
+        // 切换视频
+        function switchVideo(newIndex) {
+            // 暂停当前视频
+            const currentVideo = document.getElementById('video_' + currentVideoIndex);
+            if (currentVideo) {
+                currentVideo.pause();
+            }
+
+            // 隐藏当前
+            document.querySelectorAll('.swiper-slide').forEach(slide => {
+                slide.style.display = 'none';
+            });
+
+            // 显示新视频
+            const newSlide = document.querySelector(`.swiper-slide[data-index="${newIndex}"]`);
+            if (newSlide) {
+                newSlide.style.display = 'block';
+                currentVideoIndex = newIndex;
+                playVideo(newIndex);
+            }
+        }
+
+        // 播放视频
+        function playVideo(index) {
+            const video = document.getElementById('video_' + index);
+            const playBtn = document.getElementById('playBtn_' + index);
+            if (video) {
+                video.play().catch(e => {
+                    // 自动播放被阻止时显示播放按钮
+                    playBtn.style.display = 'block';
+                });
+                playBtn.style.display = 'none';
+            }
+        }
+
+        // 切换播放/暂停
+        function togglePlay(index) {
+            const video = document.getElementById('video_' + index);
+            const playBtn = document.getElementById('playBtn_' + index);
+            if (video.paused) {
+                video.play();
+                playBtn.style.display = 'none';
+            } else {
+                video.pause();
+                playBtn.style.display = 'block';
+            }
+        }
+
+        // 切换点赞
+        function toggleLike(index) {
+            const icon = document.getElementById('likeIcon_' + index);
+            const count = document.getElementById('likeCount_' + index);
+            const video = videos[index];
+
+            // 调用API点赞
+            API.addLike(video.id)
+                .then(function(data) {
+                    video.isLiked = !video.isLiked;
+                    if (video.isLiked) {
+                        video.likes++;
+                        icon.classList.add('liked');
+                    } else {
+                        video.likes--;
+                        icon.classList.remove('liked');
+                    }
+                    count.textContent = formatNumber(video.likes);
+                })
+                .catch(function(err) {
+                    // API失败也切换状态（离线模式）
+                    video.isLiked = !video.isLiked;
+                    if (video.isLiked) {
+                        video.likes++;
+                        icon.classList.add('liked');
+                    } else {
+                        video.likes--;
+                        icon.classList.remove('liked');
+                    }
+                    count.textContent = formatNumber(video.likes);
+                });
+        }
+
+        // 打开评论
+        function openComment(index) {
+            document.getElementById('commentOverlay').classList.add('show');
+            document.getElementById('commentModal').classList.add('show');
+            loadComments(index);
+        }
+
+        // 关闭评论
+        function closeComment() {
+            document.getElementById('commentOverlay').classList.remove('show');
+            document.getElementById('commentModal').classList.remove('show');
+        }
+
+        // 加载评论
+        function loadComments(index) {
+            const list = document.getElementById('commentList');
+            const video = videos[index];
+
+            list.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">加载中...</div>';
+
+            // 调用API获取评论
+            API.getComments(video.id, 1)
+                .then(function(data) {
+                    const comments = (data.list || data || []).map(function(c) {
+                        return {
+                            id: c.id,
+                            avatar: c.avatar || c.userinfo?.avatar || 'https://i.pravatar.cc/100',
+                            nickname: c.user_nicename || c.userinfo?.user_nicename || '用户',
+                            content: c.content || c.comment,
+                            time: c.datetime || c.addtime || '',
+                            likes: c.likes || c.like_num || 0
+                        };
+                    });
+                    renderComments(comments);
+                })
+                .catch(function(err) {
+                    console.log('获取评论失败:', err);
+                    list.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">暂无评论</div>';
+                    document.getElementById('commentCount').textContent = '0';
+                });
+        }
+
+        // 渲染评论列表
+        function renderComments(comments) {
+            const list = document.getElementById('commentList');
+
+            if (!comments || comments.length === 0) {
+                list.innerHTML = '<div style="text-align:center;padding:20px;color:#666;">暂无评论，来抢沙发吧~</div>';
+                document.getElementById('commentCount').textContent = '0';
+                return;
+            }
+
+            document.getElementById('commentCount').textContent = comments.length;
+            list.innerHTML = comments.map(c => `
+                <div class="comment-item">
+                    <img class="avatar" src="${escapeHtml(c.avatar)}" alt="">
+                    <div class="comment-content">
+                        <div class="comment-name">${escapeHtml(c.nickname)}</div>
+                        <div class="comment-text">${escapeHtml(c.content)}</div>
+                        <div class="comment-meta">
+                            <span class="time">${escapeHtml(c.time)}</span>
+                            <span>回复</span>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 发送评论
+        function sendComment() {
+            const input = document.getElementById('commentInput');
+            const content = input.value.trim();
+            if (!content) return;
+
+            const video = videos[currentVideoIndex];
+
+            // 调用API发送评论
+            API.setComment(video.id, content)
+                .then(function(data) {
+                    alert('评论发送成功');
+                    input.value = '';
+                    // 重新加载评论
+                    loadComments(currentVideoIndex);
+                })
+                .catch(function(err) {
+                    alert(err.msg || '评论发送失败');
+                });
+        }
+
+        // 分享视频
+        function shareVideo(index) {
+            if (navigator.share) {
+                navigator.share({
+                    title: videos[index].title,
+                    url: window.location.href
+                });
+            } else {
+                alert('分享功能暂不支持');
+            }
+        }
+
+        // 跳转用户主页
+        function goUserHome(uid) {
+            location.href = 'user.html?uid=' + uid;
+        }
+
+        // 数字格式化
+        function formatNumber(num) {
+            if (num >= 10000) {
+                return (num / 10000).toFixed(1) + 'w';
+            }
+            return num;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>评论 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .msg-page { padding: 60px 15px 30px; }
+        .comment-item {
+            display: flex;
+            align-items: flex-start;
+            padding: 12px 0;
+            border-bottom: 1px solid #222;
+        }
+        .comment-item img.avatar { width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; }
+        .comment-info { flex: 1; }
+        .comment-info .text { font-size: 14px; line-height: 1.4; }
+        .comment-info .text span { color: #fff; }
+        .comment-info .content { font-size: 14px; color: #ccc; margin-top: 6px; background: #1a1a1a; padding: 8px 10px; border-radius: 6px; }
+        .comment-info .time { font-size: 12px; color: #666; margin-top: 6px; }
+        .comment-item img.video { width: 44px; height: 60px; border-radius: 4px; object-fit: cover; margin-left: 10px; }
+        .reply-btn { color: var(--primary-color); font-size: 12px; margin-left: 15px; }
+    </style>
+</head>
+<body>
+    <div class="page page-full">
+        <div class="header" style="background: #000;">
+            <div class="header-btn" onclick="history.back()">
+                <svg viewBox="0 0 24 24" width="24" height="24" fill="#fff"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+            </div>
+            <span class="header-title">评论</span>
+            <div class="header-btn"></div>
+        </div>
+
+        <div class="msg-page" id="commentList"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const list = document.getElementById('commentList');
+            const comments = [];
+            const texts = ['太棒了！', '学到了', '这也太好看了吧', '哈哈哈哈笑死', '支持！', '厉害了'];
+            for (let i = 0; i < 15; i++) {
+                comments.push({
+                    id: i,
+                    avatar: 'https://i.pravatar.cc/100?img=' + (70 + i),
+                    nickname: '用户' + (600 + i),
+                    content: texts[i % texts.length],
+                    time: Math.floor(Math.random() * 24) + '小时前',
+                    video: 'https://picsum.photos/100/140?random=' + (i + 500)
+                });
+            }
+
+            list.innerHTML = comments.map(c => `
+                <div class="comment-item">
+                    <img class="avatar" src="${c.avatar}" alt="">
+                    <div class="comment-info">
+                        <div class="text"><span>${c.nickname}</span> 评论了你的作品</div>
+                        <div class="content">${c.content}</div>
+                        <div class="time">${c.time} <span class="reply-btn">回复</span></div>
+                    </div>
+                    <img class="video" src="${c.video}" alt="">
+                </div>
+            `).join('');
+        });
+    </script>
+</body>
+</html>

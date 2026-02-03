@@ -1,0 +1,613 @@
+<admintpl file="header" />
+</head>
+<body>
+<style>
+input{
+  width:500px;
+}
+.form-horizontal textarea{
+ width:500px;
+}
+
+.nav-tabs>.current>a{
+    color: #95a5a6;
+    cursor: default;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-bottom-color: transparent;
+}
+.nav li
+{
+	cursor:pointer
+}
+.nav li:hover
+{
+	cursor:pointer
+}
+.hide{
+	display:none;
+}
+</style>
+
+
+	<div class="wrap js-check-wrap">
+		
+		<ul class="nav nav-tabs js-tabs-nav">
+			<li><a>基本设置</a></li>
+			<li><a>登录配置</a></li>
+			<li><a>极光配置</a></li>
+			<li><a>云存储设置</a></li>
+			<li><a>推荐列表设置</a></li>
+            <li><a>统计配置</a></li>
+            <li><a>商品配置</a></li>
+            <li><a>邀请配置</a></li>
+            <li><a>支付配置</a></li>
+            <li><a>提现配置</a></li>
+            <li><a>上热门</a></li>
+		</ul>
+		
+		<form method="post" class="form-horizontal js-ajax-form" action="{:U('Configprivate/set_post')}">
+			<div class="js-tabs-content">
+				<!-- 基本配置 -->
+				<div>
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label">缓存开关</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[cache_switch]" <eq name="config['cache_switch']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[cache_switch]" <eq name="config['cache_switch']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline"></label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">缓存时间</label>
+							<div class="controls">				
+								<input type="text" name="post[cache_time]" value="{$config['cache_time']}">网站数据的缓存时间（秒）
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label">认证限制</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[auth_islimit]" <eq name="config['auth_islimit']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[auth_islimit]" <eq name="config['auth_islimit']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline">用户是否需要身份认证</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">未关注发送消息条数开关</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[private_letter_switch]" <eq name="config['private_letter_switch']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[private_letter_switch]" <eq name="config['private_letter_switch']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline"></label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">未关注可发送消息条数</label>
+							<div class="controls">				
+								<input type="text" name="post[private_letter_nums]" value="{$config['private_letter_nums']}"> 未关注用户可发送消息条数（整数）
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label">视频审核开关</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[video_audit_switch]" <eq name="config['video_audit_switch']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[video_audit_switch]" <eq name="config['video_audit_switch']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline"></label>
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				<!-- 登录配置 -->
+				<div>
+					<fieldset>
+						
+						<div class="control-group">
+							<label class="control-label">短信验证码开关</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[sendcode_switch]" <eq name="config['sendcode_switch']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[sendcode_switch]" <eq name="config['sendcode_switch']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline">开启后发送真实验证码；关闭后，验证码默认123456</label>
+							</div>
+						</div>
+						<!-- <div class="control-group">
+							<label class="control-label">互亿无线APIID</label>
+							<div class="controls">				
+								<input type="text" name="post[ihuyi_account]" value="{$config['ihuyi_account']}"> 短信验证码   http://www.ihuyi.com/  互亿无线后台-》验证码、短信通知-》账号及签名->APIID
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">互亿无线key</label>
+							<div class="controls">				
+								<input type="text" name="post[ihuyi_ps]" value="{$config['ihuyi_ps']}"> 短信验证码 互亿无线后台-》验证码、短信通知-》账号及签名->APIKEY
+							</div>
+						</div> -->
+                        
+                        <div class="control-group">
+							<label class="control-label">容联云ACCOUNT SID</label>
+							<div class="controls">				
+								<input type="text" name="post[ccp_sid]" value="{$config['ccp_sid']}"> 短信验证码 
+							</div>
+						</div>
+                        
+                        <div class="control-group">
+							<label class="control-label">容联云AUTH TOKEN</label>
+							<div class="controls">				
+								<input type="text" name="post[ccp_token]" value="{$config['ccp_token']}"> 短信验证码 
+							</div>
+						</div>
+                        
+                        <div class="control-group">
+							<label class="control-label">容联云应用APPID</label>
+							<div class="controls">				
+								<input type="text" name="post[ccp_appid]" value="{$config['ccp_appid']}"> 短信验证码 
+							</div>
+						</div>
+                        
+                        <div class="control-group">
+							<label class="control-label">容联云短信模板ID</label>
+							<div class="controls">				
+								<input type="text" name="post[ccp_tempid]" value="{$config['ccp_tempid']}"> 短信验证码 
+							</div>
+						</div>
+						
+						<div class="control-group">
+							<label class="control-label">短信验证码IP限制开关</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[iplimit_switch]" <eq name="config['iplimit_switch']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[iplimit_switch]" <eq name="config['iplimit_switch']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline">短信验证码IP限制开关</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">短信验证码IP限制次数</label>
+							<div class="controls">				
+								<input type="text" name="post[iplimit_times]" value="{$config['iplimit_times']}"> 同一IP每天可以发送验证码的最大次数
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				
+				<!-- 三方配置 -->
+				<div>
+					<fieldset>
+						<!-- <div class="control-group">
+							<label class="control-label">极光推送模式</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[jpush_sandbox]" <eq name="config['jpush_sandbox']" value="0">checked="checked"</eq>>开发</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[jpush_sandbox]" <eq name="config['jpush_sandbox']" value="1">checked="checked"</eq>>生产</label>
+								<label class="checkbox inline">极光推送模式</label>
+							</div>
+						</div> -->
+						<div class="control-group">
+							<label class="control-label">极光APP_KEY</label>
+							<div class="controls">				
+								<input type="text" name="post[jpush_key]" value="{$config['jpush_key']}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">极光master_secret</label>
+							<div class="controls">				
+								<input type="text" name="post[jpush_secret]" value="{$config['jpush_secret']}">
+							</div>
+						</div>
+					</fieldset>
+				</div>
+				
+				
+				
+				<!-- 腾讯云存储设置 -->
+				<div>
+					<fieldset>
+					<div class="control-group">
+							<label class="control-label">选择存储方式</label>
+							<div class="controls" id="cloudtype">
+										
+								<label class="radio inline"><input type="radio" value="1" name="post[cloudtype]" <eq name="config['cloudtype']" value="1">checked="checked"</eq>>七牛云存储</label>
+								<label class="radio inline"><input type="radio" value="2" name="post[cloudtype]" <eq name="config['cloudtype']" value="2">checked="checked"</eq>>腾讯云存储</label>
+								
+								<label class="checkbox inline"></label>
+							</div>
+					</div>
+                    <div class="cloudtype_bd">
+                            <div id="cloudtype_1" class="hide" <eq name="config['cloudtype']" value="1">style="display:block;"</eq>>
+                                <div class="control-group">
+                                    <label class="control-label">七牛云存储accessKey</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[qiniu_accesskey]" value="{$config['qiniu_accesskey']}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">七牛云存储secretKey</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[qiniu_secretkey]" value="{$config['qiniu_secretkey']}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">七牛云存储bucket</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[qiniu_bucket]" value="{$config['qiniu_bucket']}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">七牛云存储空间域名</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[qiniu_domain]" value="{$config['qiniu_domain']}">不带http://或https://，不要以/结尾；如cdn.semonghuang.org
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">七牛云存储空间地址</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[qiniu_domain_url]" value="{$config['qiniu_domain_url']}"> 以http://或https://开头，以/结尾；如https://cdn.semonghuang.org/
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="cloudtype_2" class="hide" <eq name="config['cloudtype']" value="2">style="display:block;"</eq>>
+                                <div class="control-group">
+                                    <label class="control-label">腾讯云存储appid</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[txcloud_appid]" value="{$config['txcloud_appid']}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">腾讯云存储secret_id</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[txcloud_secret_id]" value="{$config['txcloud_secret_id']}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">腾讯云存储secret_key</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[txcloud_secret_key]" value="{$config['txcloud_secret_key']}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">腾讯云存储region</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[txcloud_region]" value="{$config['txcloud_region']}"> 华北 tj 华东 sh 华南 gz
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">腾讯云存储bucket</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[txcloud_bucket]" value="{$config['txcloud_bucket']}">
+                                    </div>
+                                </div>
+
+                                <div class="control-group">
+                                    <label class="control-label">腾讯云存储图片存放目录</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[tximgfolder]" value="{$config['tximgfolder']}">
+                                    </div>
+                                </div>
+                                <div class="control-group">
+                                    <label class="control-label">腾讯云存储视频存放目录</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[txvideofolder]" value="{$config['txvideofolder']}">
+                                    </div>
+                                </div>
+                                <div class="control-group" style="display:none;">
+                                    <label class="control-label">用户头像存放目录</label>
+                                    <div class="controls">
+                                        <input type="text" class="input mr5" name="post[txuserimgfolder]" value="{$config['txuserimgfolder']}">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+					</fieldset>
+                    <script>
+					(function(){
+						$("#cloudtype label.radio").on('click',function(){
+							var v=$("input",this).val();
+							var b=$("#cloudtype_"+v);
+							b.siblings().hide();
+							b.show();
+						})
+					})()
+					</script>
+				</div>
+
+				<!-- 视频参数配置 -->
+				<div>
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label">推荐视频显示方式</label>
+							<div class="controls">
+										
+								<label class="radio inline"><input type="radio" value="0" name="post[video_showtype]" <eq name="config['video_showtype']" value="0">checked="checked"</eq>>随机</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[video_showtype]" <eq name="config['video_showtype']" value="1">checked="checked"</eq>>按曝光值</label>
+								
+								<label class="checkbox inline"></label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">广告视频开关</label>
+							<div class="controls">
+										
+								<label class="radio inline"><input type="radio" value="0" name="post[ad_video_switch]" <eq name="config['ad_video_switch']" value="0">checked="checked"</eq>>关</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[ad_video_switch]" <eq name="config['ad_video_switch']" value="1">checked="checked"</eq>>开</label>
+								
+								<label class="checkbox inline"></label>
+							</div>
+						</div>
+
+						<!-- <div class="control-group">
+							<label class="control-label">广告视频显示方式</label>
+							<div class="controls">
+										
+								<label class="radio inline"><input type="radio" value="0" name="post[ad_video_showtype]" <eq name="config['ad_video_showtype']" value="0">checked="checked"</eq>>随机</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[ad_video_showtype]" <eq name="config['ad_video_showtype']" value="1">checked="checked"</eq>>按权重值</label>
+								
+								<label class="checkbox inline"></label>
+							</div>
+						</div> -->
+
+						<div class="control-group">
+							<label class="control-label">滑动几个视频出现广告</label>
+							<div class="controls">				
+								<input type="text" name="post[video_ad_num]" value="{$config['video_ad_num']}" onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');"> 请从1,2,4,5,10,20中选择一个填写
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label">评论权重值</label>
+							<div class="controls">				
+								<input type="text" name="post[comment_weight]" value="{$config['comment_weight']}"> 用于视频推荐	
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">点赞权重值</label>
+							<div class="controls">				
+								<input type="text" name="post[like_weight]" value="{$config['like_weight']}"> 用于视频推荐
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">分享权重值</label>
+							<div class="controls">				
+								<input type="text" name="post[share_weight]" value="{$config['share_weight']}"> 用于视频推荐
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label">初始曝光值</label>
+							<div class="controls">				
+								<input type="text" name="post[show_val]" value="{$config['show_val']}" onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');"> 请填写整数，用于视频推荐
+							</div>
+						</div>
+
+						<div class="control-group">
+							<label class="control-label">每小时扣除曝光值</label>
+							<div class="controls">				
+								<input type="text" name="post[hour_minus_val]" value="{$config['hour_minus_val']}" onkeyup="this.value=this.value.replace(/[^0-9-]+/,'');"> 请填写整数，用于视频推荐
+							</div>
+						</div>
+						
+						
+					</fieldset>
+				</div>
+                <!-- 统计配置 -->
+				<div>
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label">友盟OpenApi-apiKey</label>
+							<div class="controls">				
+								<input type="text" name="post[um_apikey]" value="{$config['um_apikey']}"> 
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">友盟OpenApi-apiSecurity</label>
+							<div class="controls">				
+								<input type="text" name="post[um_apisecurity]" value="{$config['um_apisecurity']}"> 
+							</div>
+						</div>
+                        
+                        <div class="control-group">
+							<label class="control-label">友盟Android应用-appkey</label>
+							<div class="controls">				
+								<input type="text" name="post[um_appkey_android]" value="{$config['um_appkey_android']}"> 
+							</div>
+						</div>
+                        
+                        <div class="control-group">
+							<label class="control-label">友盟IOS应用-appkey</label>
+							<div class="controls">				
+								<input type="text" name="post[um_appkey_ios]" value="{$config['um_appkey_ios']}"> 
+							</div>
+						</div>
+
+					</fieldset>
+				</div>
+                
+                <!-- 商品配置 -->
+				<div>
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label">申请店铺需要的粉丝数量</label>
+							<div class="controls">				
+								<input type="text" name="post[shop_fans]" value="{$config['shop_fans']}">
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">申请店铺需要的视频数量</label>
+							<div class="controls">				
+								<input type="text" name="post[shop_videos]" value="{$config['shop_videos']}">
+							</div>
+						</div>
+                        <div class="control-group">
+							<label class="control-label">店铺审核</label>
+							<div class="controls">
+								<label class="radio inline"><input type="radio" value="0" name="post[show_switch]" <eq name="config['show_switch']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[show_switch]" <eq name="config['show_switch']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline"></label>
+							</div>
+                        </div>
+					</fieldset>
+				</div>
+                
+                <!-- 邀请配置 -->
+				<div>
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label">每邀请一个新人的奖励</label>
+							<div class="controls">				
+								<input type="text" name="post[agent_reward]" value="{$config['agent_reward']}">金币
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">每天观看的视频时长</label>
+							<div class="controls">				
+								<input type="text" name="post[agent_v_l]" value="{$config['agent_v_l']}">分钟
+							</div>
+						</div>
+                        <div class="control-group">
+							<label class="control-label">每天观看的规定视频时长的奖励</label>
+							<div class="controls">				
+								<input type="text" name="post[agent_v_a]" value="{$config['agent_v_a']}">金币
+							</div>
+						</div>
+                        <div class="control-group">
+							<label class="control-label">用户获取观看视频奖励时，上级用户获取的奖励</label>
+							<div class="controls">				
+								<input type="text" name="post[agent_a]" value="{$config['agent_a']}">金币
+							</div>
+						</div>
+
+					</fieldset>
+				</div>
+                <!-- 支付管理 -->
+				<div>
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label">支付宝APP</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[aliapp_switch]" <eq name="config['aliapp_switch']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[aliapp_switch]" <eq name="config['aliapp_switch']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline">支付宝APP支付是否开启</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">合作者身份ID</label>
+							<div class="controls">				
+								<input type="text" name="post[aliapp_partner]" value="{$config['aliapp_partner']}">支付宝合作者身份ID
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">支付宝帐号</label>
+							<div class="controls">				
+								<input type="text" name="post[aliapp_seller_id]" value="{$config['aliapp_seller_id']}">支付宝登录账号
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">支付宝密钥</label>
+							<div class="controls">				
+									<textarea name="post[aliapp_key]">{$config['aliapp_key']}</textarea>支付宝密钥pkcs8版本
+							</div>
+						</div>
+
+
+						<!-- <div class="control-group">
+							<label class="control-label">苹果支付模式</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[ios_sandbox]" <eq name="config['ios_sandbox']" value="0">checked="checked"</eq>>沙盒</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[ios_sandbox]" <eq name="config['ios_sandbox']" value="1">checked="checked"</eq>>生产</label>
+								<label class="checkbox inline">苹果支付模式</label>
+							</div>
+						</div> -->
+
+						<div class="control-group">
+							<label class="control-label">微信支付</label>
+							<div class="controls">				
+								<label class="radio inline"><input type="radio" value="0" name="post[wx_switch]" <eq name="config['wx_switch']" value="0">checked="checked"</eq>>关闭</label>
+								<label class="radio inline"><input type="radio" value="1" name="post[wx_switch]" <eq name="config['wx_switch']" value="1">checked="checked"</eq>>开启</label>
+								<label class="checkbox inline">微信支付开关</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">微信开放平台移动应用AppID</label>
+							<div class="controls">				
+								<input type="text" name="post[wx_appid]" value="{$config['wx_appid']}">微信开放平台移动应用AppID
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">微信开放平台移动应用appsecret</label>
+							<div class="controls">				
+								<input type="text" name="post[wx_appsecret]" value="{$config['wx_appsecret']}">微信开放平台移动应用appsecret
+							</div>
+						</div>
+                        <div class="control-group">
+							<label class="control-label">微信商户号mchid</label>
+							<div class="controls">				
+								<input type="text" name="post[wx_mchid]" value="{$config['wx_mchid']}">微信商户号mchid（微信开放平台移动应用 对应的微信商户 商户号mchid）
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">微信密钥key</label>
+							<div class="controls">				
+								<input type="text" name="post[wx_key]" value="{$config['wx_key']}">微信密钥key（微信开放平台移动应用 对应的微信商户 密钥key）
+							</div>
+						</div>
+					</fieldset>
+				</div>
+                <!-- 提现配置 -->
+				<div>
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label">提现比例</label>
+							<div class="controls">				
+								<input type="text" name="post[cash_rate]" value="{$config['cash_rate']}">提现一元人民币需要的票数
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label">提现最低额度（元）</label>
+							<div class="controls">				
+								<input type="text" name="post[cash_min]" value="{$config['cash_min']}">
+							</div>
+						</div>
+
+					</fieldset>
+				</div>
+                <!-- 上热门 -->
+				<div>
+					<fieldset>
+						<div class="control-group">
+							<label class="control-label">上热门视频添加间隔</label>
+							<div class="controls">				
+								<input type="text" name="post[popular_interval]" value="{$config['popular_interval']}">
+							</div>
+						</div>
+                        
+                        <div class="control-group">
+							<label class="control-label">热门基数</label>
+							<div class="controls">				
+								<input type="text" name="post[popular_base]" value="{$config['popular_base']}">一元一小时提升的播放量(整数)
+							</div>
+						</div>
+                        
+                        <div class="control-group">
+							<label class="control-label">提示内容</label>
+							<div class="controls">
+                                <textarea name="post[popular_tips]" maxlength='200'>{$config['popular_tips']}</textarea>最多200字
+							</div>
+						</div>
+
+					</fieldset>
+				</div>
+
+			</div>
+			<div class="form-actions">
+				<button type="submit" class="btn btn-primary js-ajax-submit">{:L('SAVE')}</button>
+			</div>
+		</form>
+	</div>
+	<script src="__PUBLIC__/js/common.js"></script>
+</body>
+</html>

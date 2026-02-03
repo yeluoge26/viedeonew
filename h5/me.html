@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="format-detection" content="telephone=no">
+    <title>我的 - TECHSPACE短视频</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="page" id="app">
+        <!-- 用户信息头部 -->
+        <div class="user-header">
+            <div class="user-info">
+                <img class="user-avatar" id="userAvatar" src="https://i.pravatar.cc/200" alt="">
+                <div class="user-detail">
+                    <div class="user-name" id="userName">登录/注册</div>
+                    <div class="user-id" id="userId">点击登录查看更多精彩</div>
+                </div>
+            </div>
+
+            <div class="user-bio" id="userBio">这个人很懒，什么都没有留下</div>
+
+            <div class="user-stats">
+                <div class="stat-item" onclick="goPage('follow.html')">
+                    <div class="stat-num" id="followCount">0</div>
+                    <div class="stat-label">关注</div>
+                </div>
+                <div class="stat-item" onclick="goPage('fans.html')">
+                    <div class="stat-num" id="fansCount">0</div>
+                    <div class="stat-label">粉丝</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-num" id="likeCount">0</div>
+                    <div class="stat-label">获赞</div>
+                </div>
+            </div>
+
+            <div class="user-actions" id="userActions">
+                <button class="btn btn-secondary" onclick="goPage('edit-profile.html')">编辑资料</button>
+                <button class="btn btn-secondary" onclick="goPage('settings.html')">
+                    <svg viewBox="0 0 24 24" width="18" height="18" fill="#fff" style="vertical-align: middle;">
+                        <path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- 作品/喜欢Tab -->
+        <div class="user-tabs">
+            <div class="user-tab active" data-tab="works" onclick="switchTab('works')">
+                <svg viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-8 12.5v-9l6 4.5-6 4.5z"/></svg>
+            </div>
+            <div class="user-tab" data-tab="likes" onclick="switchTab('likes')">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+            </div>
+        </div>
+
+        <!-- 作品列表 -->
+        <div class="tab-content" id="worksContent">
+            <div class="video-grid" id="worksGrid">
+                <!-- 作品由JS动态加载 -->
+            </div>
+            <div class="empty" id="worksEmpty" style="display:none;">
+                <svg viewBox="0 0 24 24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-4.86 8.86l-3 3.87L9 13.14 6 17h12l-3.86-5.14z"/></svg>
+                <span class="text">暂无作品</span>
+            </div>
+        </div>
+
+        <!-- 喜欢列表 -->
+        <div class="tab-content" id="likesContent" style="display:none;">
+            <div class="video-grid" id="likesGrid"></div>
+            <div class="empty" id="likesEmpty" style="display:none;">
+                <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                <span class="text">暂无喜欢的视频</span>
+            </div>
+        </div>
+
+        <!-- 底部导航 -->
+        <nav class="bottom-nav">
+            <a href="index.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                </div>
+                <span>首页</span>
+            </a>
+            <a href="follow.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+                </div>
+                <span>关注</span>
+            </a>
+            <div class="nav-publish" onclick="goPage('publish.html')">
+                <svg viewBox="0 0 24 24" fill="#000"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+            <a href="message.html" class="nav-item">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-1.99.9-1.99 2L2 22l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <span>消息</span>
+            </a>
+            <a href="me.html" class="nav-item active">
+                <div class="icon">
+                    <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                </div>
+                <span>我的</span>
+            </a>
+        </nav>
+    </div>
+
+    <script src="js/api.js"></script>
+    <script>
+        let isLoggedIn = false;
+        let userInfo = null;
+        let myUid = null;
+
+        // XSS防护
+        const escapeHtml = (str) => String(str).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLogin();
+        });
+
+        // 检查登录状态
+        function checkLogin() {
+            const token = localStorage.getItem('token');
+            const uid = localStorage.getItem('uid');
+            const user = localStorage.getItem('userInfo');
+
+            if (token && uid) {
+                isLoggedIn = true;
+                myUid = uid;
+
+                // 先显示缓存的用户信息
+                if (user) {
+                    userInfo = JSON.parse(user);
+                    renderUserInfo();
+                }
+
+                // 然后从API获取最新信息
+                fetchUserInfo(uid);
+                loadMyVideos(uid);
+                loadMyLikes(uid);
+            } else {
+                // 未登录状态
+                document.getElementById('userAvatar').onclick = function() {
+                    location.href = 'login.html';
+                };
+                document.getElementById('userName').onclick = function() {
+                    location.href = 'login.html';
+                };
+                document.getElementById('userName').style.cursor = 'pointer';
+
+                // 显示空状态
+                document.getElementById('worksEmpty').style.display = 'flex';
+                document.getElementById('likesEmpty').style.display = 'flex';
+            }
+        }
+
+        // 从API获取用户信息
+        function fetchUserInfo(uid) {
+            API.getUserInfo(uid)
+                .then(function(data) {
+                    userInfo = {
+                        id: data.id,
+                        nickname: data.user_nicename || data.nickname,
+                        avatar: data.avatar || data.avatar_thumb,
+                        signature: data.signature || '',
+                        follows: data.follows || 0,
+                        fans: data.fans || 0,
+                        likes: data.praise || data.likes || 0
+                    };
+                    // 更新缓存
+                    localStorage.setItem('userInfo', JSON.stringify(userInfo));
+                    renderUserInfo();
+                })
+                .catch(function(err) {
+                    console.log('获取用户信息失败:', err);
+                });
+        }
+
+        // 渲染用户信息
+        function renderUserInfo() {
+            document.getElementById('userAvatar').src = userInfo.avatar || 'https://i.pravatar.cc/200';
+            document.getElementById('userName').textContent = escapeHtml(userInfo.nickname || '用户');
+            document.getElementById('userId').textContent = 'ID: ' + userInfo.id;
+            document.getElementById('userBio').textContent = escapeHtml(userInfo.signature || '这个人很懒，什么都没有留下');
+            document.getElementById('followCount').textContent = formatNumber(userInfo.follows || 0);
+            document.getElementById('fansCount').textContent = formatNumber(userInfo.fans || 0);
+            document.getElementById('likeCount').textContent = formatNumber(userInfo.likes || 0);
+        }
+
+        // 加载我的视频
+        function loadMyVideos(uid) {
+            API.getMyVideos(uid)
+                .then(function(data) {
+                    const videos = (data.list || data || []).map(v => ({
+                        id: v.id,
+                        thumb: v.thumb || v.thumb_s,
+                        likes: v.likes || v.like_num || 0
+                    }));
+                    renderWorks(videos);
+                })
+                .catch(function(err) {
+                    console.log('获取我的视频失败:', err);
+                    document.getElementById('worksEmpty').style.display = 'flex';
+                });
+        }
+
+        // 加载我喜欢的视频
+        function loadMyLikes(uid) {
+            API.getLikeVideos(uid)
+                .then(function(data) {
+                    const videos = (data.list || data || []).map(v => ({
+                        id: v.id,
+                        thumb: v.thumb || v.thumb_s,
+                        likes: v.likes || v.like_num || 0
+                    }));
+                    renderLikes(videos);
+                })
+                .catch(function(err) {
+                    console.log('获取喜欢的视频失败:', err);
+                    document.getElementById('likesEmpty').style.display = 'flex';
+                });
+        }
+
+        // 渲染作品列表
+        function renderWorks(videos) {
+            const grid = document.getElementById('worksGrid');
+            if (!videos || videos.length === 0) {
+                document.getElementById('worksEmpty').style.display = 'flex';
+                grid.innerHTML = '';
+                return;
+            }
+
+            document.getElementById('worksEmpty').style.display = 'none';
+            grid.innerHTML = videos.map(v => `
+                <div class="video-card" onclick="location.href='play.html?id=${parseInt(v.id)}'">
+                    <img class="cover" src="${escapeHtml(v.thumb)}" alt="">
+                    <div class="stats">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        ${formatNumber(v.likes)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 渲染喜欢列表
+        function renderLikes(videos) {
+            const grid = document.getElementById('likesGrid');
+            if (!videos || videos.length === 0) {
+                document.getElementById('likesEmpty').style.display = 'flex';
+                grid.innerHTML = '';
+                return;
+            }
+
+            document.getElementById('likesEmpty').style.display = 'none';
+            grid.innerHTML = videos.map(v => `
+                <div class="video-card" onclick="location.href='play.html?id=${parseInt(v.id)}'">
+                    <img class="cover" src="${escapeHtml(v.thumb)}" alt="">
+                    <div class="stats">
+                        <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
+                        ${formatNumber(v.likes)}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 切换Tab
+        function switchTab(tab) {
+            document.querySelectorAll('.user-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector(`.user-tab[data-tab="${tab}"]`).classList.add('active');
+
+            if (tab === 'works') {
+                document.getElementById('worksContent').style.display = 'block';
+                document.getElementById('likesContent').style.display = 'none';
+            } else {
+                document.getElementById('worksContent').style.display = 'none';
+                document.getElementById('likesContent').style.display = 'block';
+            }
+        }
+
+        // 页面跳转
+        function goPage(url) {
+            location.href = url;
+        }
+
+        // 数字格式化
+        function formatNumber(num) {
+            if (num >= 10000) {
+                return (num / 10000).toFixed(1) + 'w';
+            }
+            return num;
+        }
+    </script>
+</body>
+</html>

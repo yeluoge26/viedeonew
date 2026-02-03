@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <tc_include file="Appapi/Public/head" />
+	<link type="text/css" rel="stylesheet" href="__PUBLIC__/appapi/css/agentshare.css?t=1563505716"/> 
+    <title>{$config['sitename']}</title>
+</head>
+<body>
+    <div class="agentshare">
+        <div class="agentshare_img">
+            <img src="__PUBLIC__/appapi/images/agentshare/bg.png">
+        </div>
+        <div class="agentshare_bottom">
+            <div class="bottom_l">
+                <img src="__PUBLIC__/appapi/images/agentshare/tips.png">
+            </div>
+            <div class="bottom_r">
+                <div class="down_btn" data-clipboard-text="{$agentcode}">
+                    下载体验
+                </div>
+            </div>
+        </div>
+        
+        <div class="tips">
+            <div class="tips_mark"></div>
+            <p>请点击右上角</p>
+            <p>选择“浏览器中打开”</p>
+        </div>
+    </div>
+	<script>
+        var isiPad = /iPad/i.test(navigator.userAgent);
+		var isiPhone = /iPhone|iPod/i.test(navigator.userAgent);
+		var isAndroid = /Android/i.test(navigator.userAgent);
+		var isWeixin = /MicroMessenger/i.test(navigator.userAgent);
+		var isQQ = /QQ/i.test(navigator.userAgent);
+		var isIOS = (isiPad || isiPhone);
+		var isWeibo = /Weibo/i.test(navigator.userAgent);
+		var isApp = (isAndroid || isIOS);
+        
+		var uid='{$uid}';
+		var token='{$token}';
+		var agentcode='{$agentcode}';
+		var apk_url='{$apk_url}';
+        var baseSize = 100;
+        function setRem () {
+          var scale = document.documentElement.clientWidth / 750;
+          document.documentElement.style.fontSize = (baseSize * Math.min(scale, 3)) + 'px';
+        }
+        setRem();
+        window.onresize = function () {
+          setRem();
+        }
+	</script>
+	<tc_include file="Appapi/Public/footer" />
+    <script src="__PUBLIC__/clipboard/clipboard.min.js"></script>
+    <script>
+        var clipboard = new ClipboardJS('.down_btn');
+
+        clipboard.on('success', function(e) {
+            console.log(e);
+        });
+
+        clipboard.on('error', function(e) {
+            console.log(e);
+        });
+        (function(){
+            $('.down_btn').click(function(){
+                if(isQQ || isWeixin){
+                    $('.tips').show();
+                    return !1;
+                }
+                if(isIOS){
+                    //layer.msg('IOS');
+                    location.href='{$config['ipa_url']}';
+                }else{
+                    //layer.msg('Android');
+                    if(apk_url!=''){
+                        location.href=apk_url;
+                    }
+                    
+                }
+                
+            })
+        })()
+    </script>
+</body>
+</html>
