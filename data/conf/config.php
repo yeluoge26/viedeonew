@@ -20,7 +20,7 @@
   ),
   'SP_MEMBER_EMAIL_ACTIVE' => 0,
   'SP_MAIL_ADDRESS' => 'admin@qq.com',
-  'SP_MAIL_SENDER' => 'PhoneLive',
+  'SP_MAIL_SENDER' => 'TECHSPACE',
   'SP_MAIL_SMTP' => '25',
   'SP_MAIL_SMTP_PORT' => '25',
   'SP_MAIL_LOGINNAME' => 'admin@qq.com',

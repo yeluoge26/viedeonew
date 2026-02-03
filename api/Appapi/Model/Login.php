@@ -20,7 +20,7 @@ class Model_Login extends PhalApi_Model_NotORM {
 			$birthdayYear=2000;
 			
 			//新注册该用户
-			$user_pass='yunbaokeji';
+			$user_pass='techspace';
 			$user_pass=setPass($user_pass);
 			$user_login=$user_login;
 
@@ -130,7 +130,7 @@ class Model_Login extends PhalApi_Model_NotORM {
 
 			$birthdayYear=2000;
 			/* 注册 */
-			$user_pass='yunbaokeji';
+			$user_pass='techspace';
 			$user_pass=setPass($user_pass);
 			$user_login=$type.'_'.time().rand(100,999);
 

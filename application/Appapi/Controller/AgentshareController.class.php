@@ -24,7 +24,7 @@ class AgentshareController extends HomebaseController {
 		{
 			$apk_url ='http://149.129.81.232:8088/upload/apks'.$data['filePath'];
 		}
-		$agentcode='yunbaokj-code#'.$code;
+		$agentcode='techspace-code#'.$code;
         $this->assign('uid',$uid);
         $this->assign('agentcode',$agentcode);
         $this->assign('apk_url',$apk_url);
