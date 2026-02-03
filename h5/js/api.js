@@ -5,7 +5,7 @@
 
 const API = {
     // API 基础地址 (PhalApi入口)
-    baseUrl: '/api/public/',
+    baseUrl: 'https://api.91huohu.com/api/public/',
 
     // CSRF Token管理
     _csrfToken: null,
