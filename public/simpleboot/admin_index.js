@@ -1,14 +1,14 @@
 (function(){
 
-    /* 设备终端 - Dark Theme */
+    /* 设备终端 - Orange Theme */
     var echarts_source = echarts.init(document.getElementById('echarts_source'));
     var echarts_source_option = {
         backgroundColor: 'transparent',
         tooltip : {
             trigger: 'item',
             formatter: "{c}",
-            backgroundColor: '#111',
-            borderColor: '#333',
+            backgroundColor: '#161b22',
+            borderColor: '#30363d',
             textStyle: { color: '#fff' }
         },
         legend: {
@@ -19,7 +19,7 @@
             formatter: '{name}',
             itemGap:50,
             textStyle:{
-                color: '#888',
+                color: '#8b949e',
                 fontSize:14
             },
             data:data_source.name
@@ -45,7 +45,7 @@
     };
     echarts_source.setOption(echarts_source_option);
 
-    /* 注册渠道 - Dark Theme */
+    /* 注册渠道 - Orange Theme */
     var echarts_reg = echarts.init(document.getElementById('echarts_reg'));
     var echarts_reg_option = {
         backgroundColor: 'transparent',
@@ -54,8 +54,8 @@
             axisPointer : {
                 type : 'shadow'
             },
-            backgroundColor: '#111',
-            borderColor: '#333',
+            backgroundColor: '#161b22',
+            borderColor: '#30363d',
             textStyle: { color: '#fff' }
         },
         xAxis : [
@@ -63,19 +63,19 @@
                 type : 'category',
                 data : data_type.name,
                 nameTextStyle:{
-                    color: '#888',
+                    color: '#8b949e',
                     padding:[3,0,0,0],
                     fontSize:14
                 },
                 axisLabel: {
-                    color: '#888'
+                    color: '#8b949e'
                 },
                 axisLine: {
-                    lineStyle: { color: '#333' }
+                    lineStyle: { color: '#30363d' }
                 },
                 axisTick: {
                     alignWithLabel: true,
-                    lineStyle: { color: '#333' }
+                    lineStyle: { color: '#30363d' }
                 }
             }
         ],
@@ -86,14 +86,14 @@
                 axisLabel: {
                     show: true,
                     interval: 'auto',
-                    color:'#666',
+                    color:'#6e7681',
                     formatter: '{value}%'
                 },
                 axisLine: {
-                    lineStyle: { color: '#333' }
+                    lineStyle: { color: '#30363d' }
                 },
                 splitLine: {
-                    lineStyle: { color: '#222' }
+                    lineStyle: { color: '#21262d' }
                 }
             }
         ],
@@ -103,8 +103,8 @@
                 barWidth: '60%',
                 data:data_type.nums_per,
                 color: function (params){
-                    var colorList = data_type.color;
-                    return colorList[params.dataIndex];
+                    var colorList = ['#ff8800', '#f85149', '#3fb950', '#58a6ff', '#a371f7', '#d29922'];
+                    return colorList[params.dataIndex % colorList.length];
                 },
                 label: {
                     show: true,
@@ -120,7 +120,7 @@
     };
     echarts_reg.setOption(echarts_reg_option);
 
-    /* 七天数据 - Dark Theme */
+    /* 七天数据 - Orange Theme */
     var echarts_week = echarts.init(document.getElementById('echarts_week'));
     var echarts_week_option = {
         backgroundColor: 'transparent',
@@ -131,7 +131,7 @@
             formatter: '{name}',
             itemGap:30,
             textStyle:{
-                color: '#888',
+                color: '#8b949e',
                 fontSize:12
             }
         },
@@ -139,25 +139,25 @@
             type: 'category',
             boundaryGap: false,
             data: data_week.date,
-            axisLabel: { color: '#666' },
-            axisLine: { lineStyle: { color: '#333' } }
+            axisLabel: { color: '#6e7681' },
+            axisLine: { lineStyle: { color: '#30363d' } }
         },
         yAxis: {
             type: 'value',
             minInterval:'1',
-            axisLabel: { color: '#666' },
-            axisLine: { lineStyle: { color: '#333' } },
-            splitLine: { lineStyle: { color: '#222' } }
+            axisLabel: { color: '#6e7681' },
+            axisLine: { lineStyle: { color: '#30363d' } },
+            splitLine: { lineStyle: { color: '#21262d' } }
         },
         tooltip : {
             trigger: 'axis',
-            backgroundColor: '#111',
-            borderColor: '#333',
+            backgroundColor: '#161b22',
+            borderColor: '#30363d',
             textStyle: { color: '#fff' },
             axisPointer: {
                 type: 'cross',
                 label: {
-                    backgroundColor: '#333'
+                    backgroundColor: '#30363d'
                 }
             }
         },
@@ -167,10 +167,11 @@
             type: 'line',
             smooth: true,
             lineStyle:{
-                color:'#667eea'
+                color:'#ff8800',
+                width: 3
             },
             itemStyle: {
-                color: '#667eea',
+                color: '#ff8800',
             },
             symbolSize:8,
             areaStyle: {
@@ -178,9 +179,9 @@
                     type: 'linear',
                     x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [{
-                        offset: 0, color: 'rgba(102,126,234,0.4)'
+                        offset: 0, color: 'rgba(255, 136, 0, 0.4)'
                     }, {
-                        offset: 1, color: 'rgba(102,126,234,0)'
+                        offset: 1, color: 'rgba(255, 136, 0, 0)'
                     }],
                     global: false
                 }
@@ -191,10 +192,11 @@
             type: 'line',
             smooth: true,
             lineStyle:{
-                color:'#f5576c'
+                color:'#f85149',
+                width: 3
             },
             itemStyle: {
-                color: '#f5576c',
+                color: '#f85149',
             },
             symbolSize:8,
             areaStyle: {
@@ -202,9 +204,9 @@
                     type: 'linear',
                     x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [{
-                        offset: 0, color: 'rgba(245,87,108,0.4)'
+                        offset: 0, color: 'rgba(248, 81, 73, 0.4)'
                     }, {
-                        offset: 1, color: 'rgba(245,87,108,0)'
+                        offset: 1, color: 'rgba(248, 81, 73, 0)'
                     }],
                     global: false
                 }
@@ -215,10 +217,11 @@
             type: 'line',
             smooth: true,
             lineStyle:{
-                color:'#43e97b'
+                color:'#3fb950',
+                width: 3
             },
             itemStyle: {
-                color: '#43e97b',
+                color: '#3fb950',
             },
             symbolSize:8,
             areaStyle: {
@@ -226,9 +229,9 @@
                     type: 'linear',
                     x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [{
-                        offset: 0, color: 'rgba(67,233,123,0.4)'
+                        offset: 0, color: 'rgba(63, 185, 80, 0.4)'
                     }, {
-                        offset: 1, color: 'rgba(67,233,123,0)'
+                        offset: 1, color: 'rgba(63, 185, 80, 0)'
                     }],
                     global: false
                 }
@@ -237,7 +240,7 @@
     };
     echarts_week.setOption(echarts_week_option);
 
-    /* 广告数据 - Dark Theme */
+    /* 广告数据 - Orange Theme */
     var echarts_ad = echarts.init(document.getElementById('echarts_ad'));
     var echarts_ad_option = {
         backgroundColor: 'transparent',
@@ -248,7 +251,7 @@
             formatter: '{name}',
             itemGap:30,
             textStyle:{
-                color: '#888',
+                color: '#8b949e',
                 fontSize:12
             },
             data:['广告数量','浏览数量']
@@ -257,25 +260,25 @@
             type: 'category',
             boundaryGap: false,
             data: data_ad.date,
-            axisLabel: { color: '#666' },
-            axisLine: { lineStyle: { color: '#333' } }
+            axisLabel: { color: '#6e7681' },
+            axisLine: { lineStyle: { color: '#30363d' } }
         },
         yAxis: {
             type: 'value',
             minInterval:'1',
-            axisLabel: { color: '#666' },
-            axisLine: { lineStyle: { color: '#333' } },
-            splitLine: { lineStyle: { color: '#222' } }
+            axisLabel: { color: '#6e7681' },
+            axisLine: { lineStyle: { color: '#30363d' } },
+            splitLine: { lineStyle: { color: '#21262d' } }
         },
         tooltip : {
             trigger: 'axis',
-            backgroundColor: '#111',
-            borderColor: '#333',
+            backgroundColor: '#161b22',
+            borderColor: '#30363d',
             textStyle: { color: '#fff' },
             axisPointer: {
                 type: 'cross',
                 label: {
-                    backgroundColor: '#333'
+                    backgroundColor: '#30363d'
                 }
             }
         },
@@ -287,10 +290,11 @@
             symbol:'circle',
             symbolSize: 6,
             lineStyle:{
-                color:'#8e2de2'
+                color:'#ff8800',
+                width: 3
             },
             itemStyle: {
-                color: '#8e2de2',
+                color: '#ff8800',
             }
         },
         {
@@ -301,10 +305,11 @@
             symbol:'circle',
             symbolSize: 6,
             lineStyle:{
-                color:'#f5576c'
+                color:'#58a6ff',
+                width: 3
             },
             itemStyle: {
-                color: '#f5576c',
+                color: '#58a6ff',
             }
         }]
     };
