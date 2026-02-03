@@ -1,15 +1,17 @@
 (function(){
-  
-    /* 设备终端 */
-    // 基于准备好的dom，初始化echarts实例
+
+    /* 设备终端 - Dark Theme */
     var echarts_source = echarts.init(document.getElementById('echarts_source'));
-    // 指定图表的配置项和数据
     var echarts_source_option = {
-        tooltip : {  
-            trigger: 'item',  
-            formatter: "{c}"  
+        backgroundColor: 'transparent',
+        tooltip : {
+            trigger: 'item',
+            formatter: "{c}",
+            backgroundColor: '#111',
+            borderColor: '#333',
+            textStyle: { color: '#fff' }
         },
-        legend: {  
+        legend: {
             left: 'center',
             top:'bottom',
             itemWidth:10,
@@ -17,23 +19,23 @@
             formatter: '{name}',
             itemGap:50,
             textStyle:{
-                color: '#000000',
-                fontSize:16
+                color: '#888',
+                fontSize:14
             },
             data:data_source.name
-        }
-        ,   
-        calculable : true,  
+        },
+        calculable : true,
         series : [
-            {  
-                type:'pie',  
-                radius :  ['50%', '70%'],//饼图的半径大小  
-                center: ['50%', '50%'],//饼图的位置 
-                label:{            //饼图图形上的文本标签
+            {
+                type:'pie',
+                radius :  ['50%', '70%'],
+                center: ['50%', '50%'],
+                label:{
                     show:true,
                     textStyle : {
-                        fontWeight : 300 ,
-                        fontSize : 16    //文字的字体大小
+                        fontWeight : 300,
+                        fontSize : 14,
+                        color: '#fff'
                     },
                     formatter:'{d}%'
                 },
@@ -41,31 +43,39 @@
             }
         ]
     };
-    // 使用刚指定的配置项和数据显示图表。
     echarts_source.setOption(echarts_source_option);
-    
-    /* 注册渠道 */
-    // 基于准备好的dom，初始化echarts实例
+
+    /* 注册渠道 - Dark Theme */
     var echarts_reg = echarts.init(document.getElementById('echarts_reg'));
-    // 指定图表的配置项和数据
     var echarts_reg_option = {
+        backgroundColor: 'transparent',
         tooltip : {
             trigger: 'auto',
             axisPointer : {
                 type : 'shadow'
-            }
+            },
+            backgroundColor: '#111',
+            borderColor: '#333',
+            textStyle: { color: '#fff' }
         },
         xAxis : [
             {
                 type : 'category',
                 data : data_type.name,
                 nameTextStyle:{
-                    color: '#323232',
+                    color: '#888',
                     padding:[3,0,0,0],
-                    fontSize:30
+                    fontSize:14
+                },
+                axisLabel: {
+                    color: '#888'
+                },
+                axisLine: {
+                    lineStyle: { color: '#333' }
                 },
                 axisTick: {
-                    alignWithLabel: true
+                    alignWithLabel: true,
+                    lineStyle: { color: '#333' }
                 }
             }
         ],
@@ -76,8 +86,14 @@
                 axisLabel: {
                     show: true,
                     interval: 'auto',
-                    color:'#969696',
+                    color:'#666',
                     formatter: '{value}%'
+                },
+                axisLine: {
+                    lineStyle: { color: '#333' }
+                },
+                splitLine: {
+                    lineStyle: { color: '#222' }
                 }
             }
         ],
@@ -91,52 +107,58 @@
                     return colorList[params.dataIndex];
                 },
                 label: {
-                    show: true, //开启显示
-                    position: 'top', //在上方显示
+                    show: true,
+                    position: 'top',
                     formatter: '{c}%',
-                    textStyle: { //数值样式
-                        color: '#323232',
-                        fontSize: 16
+                    textStyle: {
+                        color: '#fff',
+                        fontSize: 14
                     }
                 }
             }
         ]
     };
-    // 使用刚指定的配置项和数据显示图表。
     echarts_reg.setOption(echarts_reg_option);
-    
-    /* 七天数据 */
-    // 基于准备好的dom，初始化echarts实例
+
+    /* 七天数据 - Dark Theme */
     var echarts_week = echarts.init(document.getElementById('echarts_week'));
-    // 指定图表的配置项和数据
     var echarts_week_option = {
+        backgroundColor: 'transparent',
         legend: {
             left: 'right',
             itemWidth:10,
             itemHeight:10,
             formatter: '{name}',
-            itemGap:50,
+            itemGap:30,
             textStyle:{
-                color: '#000000',
-                fontSize:16
+                color: '#888',
+                fontSize:12
             }
         },
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: data_week.date
+            data: data_week.date,
+            axisLabel: { color: '#666' },
+            axisLine: { lineStyle: { color: '#333' } }
         },
         yAxis: {
             type: 'value',
-            minInterval:'1'
+            minInterval:'1',
+            axisLabel: { color: '#666' },
+            axisLine: { lineStyle: { color: '#333' } },
+            splitLine: { lineStyle: { color: '#222' } }
         },
         tooltip : {
             trigger: 'axis',
+            backgroundColor: '#111',
+            borderColor: '#333',
+            textStyle: { color: '#fff' },
             axisPointer: {
                 type: 'cross',
                 label: {
-                    backgroundColor: '#6a7985'
-                }   
+                    backgroundColor: '#333'
+                }
             }
         },
         series: [{
@@ -145,25 +167,22 @@
             type: 'line',
             smooth: true,
             lineStyle:{
-                color:'#4da2ff'
+                color:'#667eea'
             },
-            itemStyle: { 
-                color: '#4da2ff',
+            itemStyle: {
+                color: '#667eea',
             },
-            symbolSize:10, //折线点的大小
+            symbolSize:8,
             areaStyle: {
                 color: {
                     type: 'linear',
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
+                    x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [{
-                        offset: 0, color: '#4da2ff' // 0% 处的颜色
+                        offset: 0, color: 'rgba(102,126,234,0.4)'
                     }, {
-                        offset: 1, color: '#fff' // 100% 处的颜色
+                        offset: 1, color: 'rgba(102,126,234,0)'
                     }],
-                    global: false // 缺省为 false
+                    global: false
                 }
             }
         },{
@@ -172,25 +191,22 @@
             type: 'line',
             smooth: true,
             lineStyle:{
-                color:'#ff7a8b'
+                color:'#f5576c'
             },
-            itemStyle: { 
-                color: '#ff7a8b',
+            itemStyle: {
+                color: '#f5576c',
             },
-            symbolSize:10, //折线点的大小
+            symbolSize:8,
             areaStyle: {
                 color: {
                     type: 'linear',
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
+                    x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [{
-                        offset: 0, color: '#ff7a8b' // 0% 处的颜色
+                        offset: 0, color: 'rgba(245,87,108,0.4)'
                     }, {
-                        offset: 1, color: '#fff' // 100% 处的颜色
+                        offset: 1, color: 'rgba(245,87,108,0)'
                     }],
-                    global: false // 缺省为 false
+                    global: false
                 }
             }
         },{
@@ -199,65 +215,68 @@
             type: 'line',
             smooth: true,
             lineStyle:{
-                color:'#83d688'
+                color:'#43e97b'
             },
-            itemStyle: { 
-                color: '#83d688',
+            itemStyle: {
+                color: '#43e97b',
             },
-            symbolSize:10, //折线点的大小
+            symbolSize:8,
             areaStyle: {
                 color: {
                     type: 'linear',
-                    x: 0,
-                    y: 0,
-                    x2: 0,
-                    y2: 1,
+                    x: 0, y: 0, x2: 0, y2: 1,
                     colorStops: [{
-                        offset: 0, color: '#83d688' // 0% 处的颜色
+                        offset: 0, color: 'rgba(67,233,123,0.4)'
                     }, {
-                        offset: 1, color: '#fff' // 100% 处的颜色
+                        offset: 1, color: 'rgba(67,233,123,0)'
                     }],
-                    global: false // 缺省为 false
+                    global: false
                 }
             }
         }]
     };
-    // 使用刚指定的配置项和数据显示图表。
-    echarts_week.setOption(echarts_week_option);  
+    echarts_week.setOption(echarts_week_option);
 
-    /* 广告数据 */
-    // 基于准备好的dom，初始化echarts实例
+    /* 广告数据 - Dark Theme */
     var echarts_ad = echarts.init(document.getElementById('echarts_ad'));
-    // 指定图表的配置项和数据
     var echarts_ad_option = {
+        backgroundColor: 'transparent',
         legend: {
             left: 'right',
             itemWidth:10,
             itemHeight:10,
             formatter: '{name}',
-            itemGap:50,
+            itemGap:30,
             textStyle:{
-                color: '#000000',
-                fontSize:16
+                color: '#888',
+                fontSize:12
             },
             data:['广告数量','浏览数量']
         },
         xAxis: {
             type: 'category',
             boundaryGap: false,
-            data: data_ad.date
+            data: data_ad.date,
+            axisLabel: { color: '#666' },
+            axisLine: { lineStyle: { color: '#333' } }
         },
         yAxis: {
             type: 'value',
-            minInterval:'1'
+            minInterval:'1',
+            axisLabel: { color: '#666' },
+            axisLine: { lineStyle: { color: '#333' } },
+            splitLine: { lineStyle: { color: '#222' } }
         },
         tooltip : {
             trigger: 'axis',
+            backgroundColor: '#111',
+            borderColor: '#333',
+            textStyle: { color: '#fff' },
             axisPointer: {
                 type: 'cross',
                 label: {
-                    backgroundColor: '#6a7985'
-                }   
+                    backgroundColor: '#333'
+                }
             }
         },
         series: [{
@@ -266,11 +285,12 @@
             type: 'line',
             smooth: true,
             symbol:'circle',
+            symbolSize: 6,
             lineStyle:{
-                color:'#9e80fc'
+                color:'#8e2de2'
             },
-            itemStyle: { 
-                color: '#9e80fc',
+            itemStyle: {
+                color: '#8e2de2',
             }
         },
         {
@@ -279,17 +299,16 @@
             type: 'line',
             smooth: true,
             symbol:'circle',
+            symbolSize: 6,
             lineStyle:{
-                color:'#ff7a8b'
+                color:'#f5576c'
             },
-            itemStyle: { 
-                color: '#ff7a8b',
+            itemStyle: {
+                color: '#f5576c',
             }
         }]
     };
-    // 使用刚指定的配置项和数据显示图表。
-    echarts_ad.setOption(echarts_ad_option);    
-    
+    echarts_ad.setOption(echarts_ad_option);
 
 
     /* ajax */
@@ -304,64 +323,53 @@
                 var info=data.info;
                 if(code!=1){
                     alert(info);
-                    //parent.location.reload();
                     return !1;
                 }
-                
+
                 var action=request_data.action;
                 switch(action){
                     case '1':
-                        /* 基本指标 */
                         $(".basic_list li.newusers .basic_list_n span").text(info.newusers);
                         $(".basic_list li.launches .basic_list_n span").text(info.launches);
                         $(".basic_list li.durations .basic_list_n span").text(info.durations);
                         $(".basic_list li.activityusers .basic_list_n span").text(info.activeusers);
-                        //$(".basic_list li.users_total .basic_list_n span").text(info.nums);
                         break;
                     case '2':
-                        /* 七天数据 */
                         echarts_week_option.xAxis.data=[];
                         echarts_week_option.series[0].data=[];
-                        echarts_week.setOption(echarts_week_option);    
+                        echarts_week.setOption(echarts_week_option);
                         break;
                     case '3':
-                        /* 广告数据 */
                         echarts_ad_option.xAxis.data=info.date;
                         echarts_ad_option.series[0].data=info.value;
                         echarts_ad_option.series[1].data=info.videoviews;
-                        echarts_ad.setOption(echarts_ad_option);    
+                        echarts_ad.setOption(echarts_ad_option);
                         break;
                 }
             },
             error:function(){
-                
+
             }
         })
     }
 
-   
+
     $(".search").click(function(){
         var _this=$(this);
         var start_time=_this.parents('.bd_title').find("input[name=start_time]").val();
         var end_time=_this.parents('.bd_title').find("input[name=end_time]").val();
-
         var action=_this.parents('.bd_title').find(".action").val();
-
-
         var request_data={action:action,start_time:start_time,end_time:end_time};
         getData(request_data);
     })
 
-    
+
     $(".export").click(function(){
         var _this=$(this);
-
         var action=_this.parents('.bd_title').find(".action").val();
         var start_time=_this.parents('.bd_title').find("input[name=start_time]").val();
         var end_time=_this.parents('.bd_title').find("input[name=end_time]").val();
-
-
         location.href='/index.php?g=admin&m=Main&a=export&action='+action+'&start_time='+start_time+'&end_time='+end_time;
     })
-    
+
 })()
