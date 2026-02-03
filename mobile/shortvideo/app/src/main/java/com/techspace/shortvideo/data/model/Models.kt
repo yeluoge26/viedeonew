@@ -50,6 +50,7 @@ data class UserBean(
 
 /**
  * 视频数据模型 - 匹配H5的video结构
+ * H5返回格式: { id, uid, title, href, thumb, likes, comments, shares, islike, isattent, userinfo: { id, user_nicename, avatar } }
  */
 data class VideoBean(
     @SerializedName("id") val id: String = "",
@@ -65,9 +66,12 @@ data class VideoBean(
     @SerializedName("islike") val isLiked: Int = 0,
     @SerializedName("isstep") val isStepped: Int = 0,
     @SerializedName("iscollection") val isCollected: Int = 0,
-    @SerializedName("user_nicename") val userNickname: String = "",
-    @SerializedName("avatar") val userAvatar: String = "",
+    // 平铺字段 (部分API返回这种格式)
+    @SerializedName("user_nicename") private val _userNickname: String = "",
+    @SerializedName("avatar") private val _userAvatar: String = "",
     @SerializedName("isattent") val isAttent: Int = 0,
+    // 嵌套userinfo对象 (H5返回格式)
+    @SerializedName("userinfo") val userinfo: VideoUserInfo? = null,
     @SerializedName("music_id") val musicId: String = "",
     @SerializedName("music_title") val musicTitle: String = "",
     @SerializedName("music_img") val musicImg: String = "",
@@ -78,6 +82,20 @@ data class VideoBean(
     @SerializedName("datetime") val dateTime: String = "",
     @SerializedName("label_name") val labelName: String = "",
     @SerializedName("status") val status: Int = 1
+) {
+    // 兼容两种数据格式: 优先使用userinfo嵌套对象
+    val userNickname: String get() = userinfo?.nickname?.ifEmpty { _userNickname } ?: _userNickname
+    val userAvatar: String get() = userinfo?.avatar?.ifEmpty { userinfo?.avatarThumb?.ifEmpty { _userAvatar } ?: _userAvatar } ?: _userAvatar
+}
+
+/**
+ * 视频作者信息 - 匹配H5的userinfo嵌套结构
+ */
+data class VideoUserInfo(
+    @SerializedName("id") val id: String = "",
+    @SerializedName("user_nicename") val nickname: String = "",
+    @SerializedName("avatar") val avatar: String = "",
+    @SerializedName("avatar_thumb") val avatarThumb: String = ""
 )
 
 /**
