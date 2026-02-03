@@ -1,6 +1,3 @@
-# Mobile apps (not needed on server)
-mobile/
-
 # Runtime and cache
 data/runtime/
 api/runtime/

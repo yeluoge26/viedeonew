@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TECHSPACE</string>
+
+    <!-- Navigation -->
+    <string name="nav_home">首页</string>
+    <string name="nav_follow">关注</string>
+    <string name="nav_publish">发布</string>
+    <string name="nav_message">消息</string>
+    <string name="nav_profile">我</string>
+
+    <!-- Login/Register -->
+    <string name="login">登录</string>
+    <string name="register">注册</string>
+    <string name="login_subtitle">使用手机号登录</string>
+    <string name="welcome_back">欢迎回到 TECHSPACE</string>
+    <string name="phone_hint">请输入手机号</string>
+    <string name="code_hint">请输入验证码</string>
+    <string name="get_code">获取验证码</string>
+    <string name="input_phone">请输入手机号</string>
+    <string name="input_code">请输入验证码</string>
+    <string name="login_success">登录成功</string>
+    <string name="login_failed">登录失败</string>
+    <string name="register_success">注册成功</string>
+    <string name="register_failed">注册失败</string>
+    <string name="code_sent">验证码已发送</string>
+    <string name="send_code_failed">发送验证码失败</string>
+    <string name="network_error">网络错误，请重试</string>
+    <string name="test_code_hint">测试验证码: 123456</string>
+
+    <!-- Home -->
+    <string name="recommend">推荐</string>
+    <string name="hot">热门</string>
+    <string name="nearby">附近</string>
+    <string name="following">关注</string>
+
+    <!-- Video -->
+    <string name="like">点赞</string>
+    <string name="comment">评论</string>
+    <string name="share">分享</string>
+    <string name="follow">关注</string>
+    <string name="unfollow">已关注</string>
+    <string name="comments">评论</string>
+    <string name="write_comment">写评论...</string>
+    <string name="send">发送</string>
+    <string name="no_comments">暂无评论</string>
+
+    <!-- User Profile -->
+    <string name="fans">粉丝</string>
+    <string name="follows">关注</string>
+    <string name="likes">获赞</string>
+    <string name="works">作品</string>
+    <string name="edit_profile">编辑资料</string>
+    <string name="settings">设置</string>
+    <string name="logout">退出登录</string>
+    <string name="logout_confirm">确定要退出登录吗？</string>
+    <string name="male">男</string>
+    <string name="female">女</string>
+    <string name="unknown">未知</string>
+    <string name="no_signature">这个人很懒，什么都没写</string>
+
+    <!-- Message -->
+    <string name="new_fans">新粉丝</string>
+    <string name="new_likes">点赞</string>
+    <string name="new_comments">评论</string>
+    <string name="at_me">@我的</string>
+    <string name="system_msg">系统消息</string>
+
+    <!-- Search -->
+    <string name="search">搜索</string>
+    <string name="search_hint">搜索用户或视频...</string>
+    <string name="search_users">用户</string>
+    <string name="search_videos">视频</string>
+    <string name="no_results">未找到结果</string>
+
+    <!-- Common -->
+    <string name="loading">加载中...</string>
+    <string name="no_data">暂无数据</string>
+    <string name="error">错误</string>
+    <string name="retry">重试</string>
+    <string name="back">返回</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
+    <string name="save">保存</string>
+    <string name="delete">删除</string>
+    <string name="refresh">刷新</string>
+    <string name="load_more">加载更多</string>
+    <string name="no_more_data">没有更多数据</string>
+    <string name="please_login">请先登录</string>
+    <string name="operation_success">操作成功</string>
+    <string name="operation_failed">操作失败</string>
+
+    <!-- Settings -->
+    <string name="account_security">账号与安全</string>
+    <string name="privacy_settings">隐私设置</string>
+    <string name="notification_settings">通知设置</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="about_us">关于我们</string>
+    <string name="version">版本</string>
+    <string name="check_update">检查更新</string>
+    <string name="feedback">意见反馈</string>
+    <string name="terms_of_service">服务条款</string>
+    <string name="privacy_policy">隐私政策</string>
+
+    <!-- Profile Menu -->
+    <string name="my_likes">我的喜欢</string>
+    <string name="view_history">观看历史</string>
+    <string name="my_wallet">我的钱包</string>
+    <string name="customer_service">联系客服</string>
+</resources>
