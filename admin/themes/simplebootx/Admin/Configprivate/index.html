@@ -34,11 +34,8 @@ input{
 		
 		<ul class="nav nav-tabs js-tabs-nav">
 			<li><a>基本设置</a></li>
-			<li><a>登录配置</a></li>
-			<li><a>极光配置</a></li>
 			<li><a>云存储设置</a></li>
 			<li><a>推荐列表设置</a></li>
-            <li><a>统计配置</a></li>
             <li><a>邀请配置</a></li>
             <li><a>上热门</a></li>
 		</ul>
@@ -96,104 +93,7 @@ input{
 						</div>
 					</fieldset>
 				</div>
-				<!-- 登录配置 -->
-				<div>
-					<fieldset>
-						
-						<div class="control-group">
-							<label class="control-label">短信验证码开关</label>
-							<div class="controls">				
-								<label class="radio inline"><input type="radio" value="0" name="post[sendcode_switch]" <eq name="config['sendcode_switch']" value="0">checked="checked"</eq>>关闭</label>
-								<label class="radio inline"><input type="radio" value="1" name="post[sendcode_switch]" <eq name="config['sendcode_switch']" value="1">checked="checked"</eq>>开启</label>
-								<label class="checkbox inline">开启后发送真实验证码；关闭后，验证码默认123456</label>
-							</div>
-						</div>
-						<!-- <div class="control-group">
-							<label class="control-label">互亿无线APIID</label>
-							<div class="controls">				
-								<input type="text" name="post[ihuyi_account]" value="{$config['ihuyi_account']}"> 短信验证码   http://www.ihuyi.com/  互亿无线后台-》验证码、短信通知-》账号及签名->APIID
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">互亿无线key</label>
-							<div class="controls">				
-								<input type="text" name="post[ihuyi_ps]" value="{$config['ihuyi_ps']}"> 短信验证码 互亿无线后台-》验证码、短信通知-》账号及签名->APIKEY
-							</div>
-						</div> -->
-                        
-                        <div class="control-group">
-							<label class="control-label">容联云ACCOUNT SID</label>
-							<div class="controls">				
-								<input type="text" name="post[ccp_sid]" value="{$config['ccp_sid']}"> 短信验证码 
-							</div>
-						</div>
-                        
-                        <div class="control-group">
-							<label class="control-label">容联云AUTH TOKEN</label>
-							<div class="controls">				
-								<input type="text" name="post[ccp_token]" value="{$config['ccp_token']}"> 短信验证码 
-							</div>
-						</div>
-                        
-                        <div class="control-group">
-							<label class="control-label">容联云应用APPID</label>
-							<div class="controls">				
-								<input type="text" name="post[ccp_appid]" value="{$config['ccp_appid']}"> 短信验证码 
-							</div>
-						</div>
-                        
-                        <div class="control-group">
-							<label class="control-label">容联云短信模板ID</label>
-							<div class="controls">				
-								<input type="text" name="post[ccp_tempid]" value="{$config['ccp_tempid']}"> 短信验证码 
-							</div>
-						</div>
-						
-						<div class="control-group">
-							<label class="control-label">短信验证码IP限制开关</label>
-							<div class="controls">				
-								<label class="radio inline"><input type="radio" value="0" name="post[iplimit_switch]" <eq name="config['iplimit_switch']" value="0">checked="checked"</eq>>关闭</label>
-								<label class="radio inline"><input type="radio" value="1" name="post[iplimit_switch]" <eq name="config['iplimit_switch']" value="1">checked="checked"</eq>>开启</label>
-								<label class="checkbox inline">短信验证码IP限制开关</label>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">短信验证码IP限制次数</label>
-							<div class="controls">				
-								<input type="text" name="post[iplimit_times]" value="{$config['iplimit_times']}"> 同一IP每天可以发送验证码的最大次数
-							</div>
-						</div>
-					</fieldset>
-				</div>
-				
-				<!-- 三方配置 -->
-				<div>
-					<fieldset>
-						<!-- <div class="control-group">
-							<label class="control-label">极光推送模式</label>
-							<div class="controls">				
-								<label class="radio inline"><input type="radio" value="0" name="post[jpush_sandbox]" <eq name="config['jpush_sandbox']" value="0">checked="checked"</eq>>开发</label>
-								<label class="radio inline"><input type="radio" value="1" name="post[jpush_sandbox]" <eq name="config['jpush_sandbox']" value="1">checked="checked"</eq>>生产</label>
-								<label class="checkbox inline">极光推送模式</label>
-							</div>
-						</div> -->
-						<div class="control-group">
-							<label class="control-label">极光APP_KEY</label>
-							<div class="controls">				
-								<input type="text" name="post[jpush_key]" value="{$config['jpush_key']}">
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">极光master_secret</label>
-							<div class="controls">				
-								<input type="text" name="post[jpush_secret]" value="{$config['jpush_secret']}">
-							</div>
-						</div>
-					</fieldset>
-				</div>
-				
-				
-				
+
 				<!-- 腾讯云存储设置 -->
 				<div>
 					<fieldset>
@@ -389,38 +289,6 @@ input{
 						</div>
 						
 						
-					</fieldset>
-				</div>
-                <!-- 统计配置 -->
-				<div>
-					<fieldset>
-						<div class="control-group">
-							<label class="control-label">友盟OpenApi-apiKey</label>
-							<div class="controls">				
-								<input type="text" name="post[um_apikey]" value="{$config['um_apikey']}"> 
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">友盟OpenApi-apiSecurity</label>
-							<div class="controls">				
-								<input type="text" name="post[um_apisecurity]" value="{$config['um_apisecurity']}"> 
-							</div>
-						</div>
-                        
-                        <div class="control-group">
-							<label class="control-label">友盟Android应用-appkey</label>
-							<div class="controls">				
-								<input type="text" name="post[um_appkey_android]" value="{$config['um_appkey_android']}"> 
-							</div>
-						</div>
-                        
-                        <div class="control-group">
-							<label class="control-label">友盟IOS应用-appkey</label>
-							<div class="controls">				
-								<input type="text" name="post[um_appkey_ios]" value="{$config['um_appkey_ios']}"> 
-							</div>
-						</div>
-
 					</fieldset>
 				</div>
 
