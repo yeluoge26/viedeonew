@@ -1,6 +1,9 @@
 <?php
-
-class Api_Cash extends PhalApi_Api {  
+/**
+ * 提现/充值 API - 已禁用
+ * Cash/Charge API - DISABLED
+ */
+class Api_Cash extends PhalApi_Api {
 
 	public function getRules() {
 		return array(
@@ -8,304 +11,47 @@ class Api_Cash extends PhalApi_Api {
 				'uid' => array('name' => 'uid', 'type' => 'int', 'desc' => '用户ID'),
                 'token' => array('name' => 'token', 'type' => 'string', 'desc' => '用户token'),
 			),
-
             'setAccount' => array(
 				'uid' => array('name' => 'uid', 'type' => 'int', 'desc' => '用户ID'),
                 'token' => array('name' => 'token', 'type' => 'string', 'desc' => '用户token'),
-                'type' => array('name' => 'type', 'type' => 'int', 'desc' => '账号类型，1支付宝，2微信，3银行卡'),
-                'account_bank' => array('name' => 'account_bank', 'type' => 'string', 'default' => '', 'desc' => '银行名称'),
-                'account' => array('name' => 'account', 'type' => 'string', 'desc' => '账号'),
-                'name' => array('name' => 'name', 'type' => 'string', 'default' => '', 'desc' => '姓名'),
 			),
-            
             'delAccount' => array(
 				'uid' => array('name' => 'uid', 'type' => 'int','desc' => '用户ID'),
                 'token' => array('name' => 'token', 'type' => 'string', 'desc' => '用户token'),
-                'id' => array('name' => 'id', 'type' => 'int','desc' => '账号ID'),
 			),
-				
 			'getProfit' => array(
 				'uid' => array('name' => 'uid', 'type' => 'int','desc' => '用户ID'),
 				'token' => array('name' => 'token', 'type' => 'string', 'desc' => '用户token'),
 			),
-			
 			'setCash' => array(
 				'uid' => array('name' => 'uid', 'type' => 'int','desc' => '用户ID'),
 				'token' => array('name' => 'token', 'type' => 'string', 'desc' => '用户token'),
-				'accountid' => array('name' => 'accountid', 'type' => 'int','desc' => '账号ID'),
-				'money' => array('name' => 'money', 'type' => 'int', 'desc' => '提现金额'),
 			),
 		);
 	}
 
-	/**
-	 * 获取用户提现账号 
-	 * @desc 用于获取用户提现账号
-	 * @return int code 操作码，0表示成功
-	 * @return array info 
-	 * @return string info[].id 账号ID
-	 * @return string info[].type 账号类型
-	 * @return string info[].account_bank 银行名称
-	 * @return string info[].account 账号
-	 * @return string info[].name 姓名
-	 * @return string msg 提示信息
-	 */
+	// 已禁用 - Payment disabled
 	public function getAccountList() {
-		$rs = array('code' => 0, 'msg' => '', 'info' => array());
-        
-        $uid=checkNull($this->uid);
-        $token=checkNull($this->token);
-        
-        if($uid<1 || $token==''){
-            $rs['code'] = 1001;
-			$rs['msg'] = '信息错误';
-			return $rs;
-        }
+		return array('code' => 1000, 'msg' => '功能已禁用', 'info' => array());
+	}
 
-        
-        $checkToken=checkToken($uid,$token);
-		if($checkToken==700){
-			$rs['code'] = $checkToken;
-			$rs['msg'] = '您的登陆状态失效，请重新登陆！';
-			return $rs;
-		}        
-    
-
-        $domain = new Domain_Cash();
-        $info = $domain->getAccountList($uid);
-
-		$rs['info']=$info;
-
-		return $rs;
-	}	
-
-	/**
-	 * 获取用户提现账号 
-	 * @desc 用于获取用户提现账号
-	 * @return int code 操作码，0表示成功
-	 * @return array info 
-	 * @return string msg 提示信息
-	 */
+	// 已禁用 - Payment disabled
 	public function setAccount() {
-		$rs = array('code' => 0, 'msg' => '添加成功', 'info' => array());
-        
-        $uid=checkNull($this->uid);
-        $token=checkNull($this->token);
-        
-        if($uid<1 || $token==''){
-            $rs['code'] = 1001;
-			$rs['msg'] = '信息错误';
-			return $rs;
-        }
-        
-        $type=checkNull($this->type);
-        $account_bank=checkNull($this->account_bank);
-        $account=checkNull($this->account);
-        $name=checkNull($this->name);
+		return array('code' => 1000, 'msg' => '功能已禁用', 'info' => array());
+	}
 
-        if($type==3){
-            if($account_bank==''){
-                $rs['code'] = 1001;
-                $rs['msg'] = '银行名称不能为空';
-                return $rs;
-            }
-        }
-        
-        if($account==''){
-            $rs['code'] = 1002;
-            $rs['msg'] = '账号不能为空';
-            return $rs;
-        }
-        
-        if($name==''){
-            $rs['code'] = 1003;
-            $rs['msg'] = '姓名不能为空';
-            return $rs;
-        }
-        
-        $checkToken=checkToken($uid,$token);
-		if($checkToken==700){
-			$rs['code'] = $checkToken;
-			$rs['msg'] = '您的登陆状态失效，请重新登陆！';
-			return $rs;
-		}        
-        
-        $data=array(
-            'uid'=>$uid,
-            'type'=>$type,
-            'account_bank'=>$account_bank,
-            'account'=>$account,
-            'name'=>$name,
-            'addtime'=>time(),
-        );
-        
-        $domain = new Domain_Cash();
-        $result = $domain->setAccount($data);
-
-        if(!$result){
-            $rs['code'] = 1003;
-            $rs['msg'] = '添加失败，请重试';
-            return $rs;
-        }
-        
-        $rs['info'][0]=$result;
-
-		return $rs;
-	}	
-
-
-	/**
-	 * 删除用户提现账号 
-	 * @desc 用于删除用户提现账号
-	 * @return int code 操作码，0表示成功
-	 * @return array info 
-	 * @return string msg 提示信息
-	 */
+	// 已禁用 - Payment disabled
 	public function delAccount() {
-		$rs = array('code' => 0, 'msg' => '删除成功', 'info' => array());
-        
-        $uid=checkNull($this->uid);
-        $token=checkNull($this->token);
-        
-        if($uid<1 || $token==''){
-            $rs['code'] = 1001;
-			$rs['msg'] = '信息错误';
-			return $rs;
-        }
-        
-        $id=checkNull($this->id);
-        
-        $checkToken=checkToken($uid,$token);
-		if($checkToken==700){
-			$rs['code'] = $checkToken;
-			$rs['msg'] = '您的登陆状态失效，请重新登陆！';
-			return $rs;
-		}        
-        
-        $data=array(
-            'uid'=>$uid,
-            'id'=>$id,
-        );
-        
-        $domain = new Domain_Cash();
-        $result = $domain->delAccount($data);
-
-        if(!$result){
-            $rs['code'] = 1003;
-            $rs['msg'] = '删除失败，请重试';
-            return $rs;
-        }
-
-		return $rs;
+		return array('code' => 1000, 'msg' => '功能已禁用', 'info' => array());
 	}
-    
-	/**
-	 * 我的收益
-	 * @desc 用于获取用户收益，包括可体现金额，今日可提现金额
-	 * @return int code 操作码，0表示成功
-	 * @return array info 
-	 * @return string info[0].votes 余额
-	 * @return string info[0].total 可提现金额
-	 * @return string msg 提示信息
-	 */
+
+	// 已禁用 - Payment disabled
 	public function getProfit() {
-		$rs = array('code' => 0, 'msg' => '', 'info' => array());
-		
-        $uid=checkNull($this->uid);
-        $token=checkNull($this->token);
-        
-        if($uid<1 || $token==''){
-            $rs['code'] = 1001;
-			$rs['msg'] = '信息错误';
-			return $rs;
-        }
-        
-		$checkToken=checkToken($uid,$token);
-		if($checkToken==700){
-			$rs['code'] = $checkToken;
-			$rs['msg'] = '您的登陆状态失效，请重新登陆！';
-			return $rs;
-		} 
-		
-		$domain = new Domain_Cash();
-		$info = $domain->getProfit($uid);
-	 
-		$rs['info'][0]=$info;
-		return $rs;
-	}	
-	
-	/**
-	 * 用户提现
-	 * @desc 用于进行用户提现
-	 * @return int code 操作码，0表示成功
-	 * @return array info 
-	 * @return string info[0].msg 提现成功信息
-	 * @return string msg 提示信息
-	 */
-	public function setCash() {
-		$rs = array('code' => 0, 'msg' => '提现成功', 'info' => array());
-        
-        $uid=checkNull($this->uid);
-        $token=checkNull($this->token);
-        
-        if($uid<1 || $token==''){
-            $rs['code'] = 1001;
-			$rs['msg'] = '信息错误';
-			return $rs;
-        }
-        
-        $accountid=checkNull($this->accountid);		
-        $money=checkNull($this->money);		
-        
-		$checkToken=checkToken($uid,$token);
-		if($checkToken==700){
-			$rs['code'] = $checkToken;
-			$rs['msg'] = '您的登陆状态失效，请重新登陆！';
-			return $rs;
-		}
-        
-        if(!$accountid){
-            $rs['code'] = 1001;
-			$rs['msg'] = '请选择提现账号';
-			return $rs;
-        }
-        
-        if($money<=0){
-            $rs['code'] = 1002;
-			$rs['msg'] = '请输入有效的提现金额';
-			return $rs;
-        }
-		
-        $data=array(
-            'uid'=>$uid,
-            'accountid'=>$accountid,
-            'money'=>$money,
-        );
-        
-        $config=getConfigPri();
-        
-		$domain = new Domain_Cash();
-		$info = $domain->setCash($data);
-        
-		if($info==1001){
-			$rs['code'] = 1001;
-			$rs['msg'] = '余额不足';
-			return $rs;
-		}else if($info==1004){
-			$rs['code'] = 1004;
-			$rs['msg'] = '提现最低额度为'.$config['cash_min'].'元';
-			return $rs;
-		}else if($info==1007){
-			$rs['code'] = 1007;
-			$rs['msg'] = '提现账号信息不正确';
-			return $rs;
-		}else if(!$info){
-			$rs['code'] = 1002;
-			$rs['msg'] = '提现失败，请重试';
-			return $rs;
-		}
-	 
-		$rs['info'][0]['msg']='提现成功';
-		return $rs;
+		return array('code' => 1000, 'msg' => '功能已禁用', 'info' => array());
 	}
-} 
+
+	// 已禁用 - Payment disabled
+	public function setCash() {
+		return array('code' => 1000, 'msg' => '功能已禁用', 'info' => array());
+	}
+}
