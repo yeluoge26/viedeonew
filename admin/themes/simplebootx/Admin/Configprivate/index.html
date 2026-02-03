@@ -39,10 +39,7 @@ input{
 			<li><a>云存储设置</a></li>
 			<li><a>推荐列表设置</a></li>
             <li><a>统计配置</a></li>
-            <li><a>商品配置</a></li>
             <li><a>邀请配置</a></li>
-            <li><a>支付配置</a></li>
-            <li><a>提现配置</a></li>
             <li><a>上热门</a></li>
 		</ul>
 		
@@ -426,33 +423,7 @@ input{
 
 					</fieldset>
 				</div>
-                
-                <!-- 商品配置 -->
-				<div>
-					<fieldset>
-						<div class="control-group">
-							<label class="control-label">申请店铺需要的粉丝数量</label>
-							<div class="controls">				
-								<input type="text" name="post[shop_fans]" value="{$config['shop_fans']}">
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">申请店铺需要的视频数量</label>
-							<div class="controls">				
-								<input type="text" name="post[shop_videos]" value="{$config['shop_videos']}">
-							</div>
-						</div>
-                        <div class="control-group">
-							<label class="control-label">店铺审核</label>
-							<div class="controls">
-								<label class="radio inline"><input type="radio" value="0" name="post[show_switch]" <eq name="config['show_switch']" value="0">checked="checked"</eq>>关闭</label>
-								<label class="radio inline"><input type="radio" value="1" name="post[show_switch]" <eq name="config['show_switch']" value="1">checked="checked"</eq>>开启</label>
-								<label class="checkbox inline"></label>
-							</div>
-                        </div>
-					</fieldset>
-				</div>
-                
+
                 <!-- 邀请配置 -->
 				<div>
 					<fieldset>
@@ -478,98 +449,6 @@ input{
 							<label class="control-label">用户获取观看视频奖励时，上级用户获取的奖励</label>
 							<div class="controls">				
 								<input type="text" name="post[agent_a]" value="{$config['agent_a']}">金币
-							</div>
-						</div>
-
-					</fieldset>
-				</div>
-                <!-- 支付管理 -->
-				<div>
-					<fieldset>
-						<div class="control-group">
-							<label class="control-label">支付宝APP</label>
-							<div class="controls">				
-								<label class="radio inline"><input type="radio" value="0" name="post[aliapp_switch]" <eq name="config['aliapp_switch']" value="0">checked="checked"</eq>>关闭</label>
-								<label class="radio inline"><input type="radio" value="1" name="post[aliapp_switch]" <eq name="config['aliapp_switch']" value="1">checked="checked"</eq>>开启</label>
-								<label class="checkbox inline">支付宝APP支付是否开启</label>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">合作者身份ID</label>
-							<div class="controls">				
-								<input type="text" name="post[aliapp_partner]" value="{$config['aliapp_partner']}">支付宝合作者身份ID
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">支付宝帐号</label>
-							<div class="controls">				
-								<input type="text" name="post[aliapp_seller_id]" value="{$config['aliapp_seller_id']}">支付宝登录账号
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">支付宝密钥</label>
-							<div class="controls">				
-									<textarea name="post[aliapp_key]">{$config['aliapp_key']}</textarea>支付宝密钥pkcs8版本
-							</div>
-						</div>
-
-
-						<!-- <div class="control-group">
-							<label class="control-label">苹果支付模式</label>
-							<div class="controls">				
-								<label class="radio inline"><input type="radio" value="0" name="post[ios_sandbox]" <eq name="config['ios_sandbox']" value="0">checked="checked"</eq>>沙盒</label>
-								<label class="radio inline"><input type="radio" value="1" name="post[ios_sandbox]" <eq name="config['ios_sandbox']" value="1">checked="checked"</eq>>生产</label>
-								<label class="checkbox inline">苹果支付模式</label>
-							</div>
-						</div> -->
-
-						<div class="control-group">
-							<label class="control-label">微信支付</label>
-							<div class="controls">				
-								<label class="radio inline"><input type="radio" value="0" name="post[wx_switch]" <eq name="config['wx_switch']" value="0">checked="checked"</eq>>关闭</label>
-								<label class="radio inline"><input type="radio" value="1" name="post[wx_switch]" <eq name="config['wx_switch']" value="1">checked="checked"</eq>>开启</label>
-								<label class="checkbox inline">微信支付开关</label>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">微信开放平台移动应用AppID</label>
-							<div class="controls">				
-								<input type="text" name="post[wx_appid]" value="{$config['wx_appid']}">微信开放平台移动应用AppID
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">微信开放平台移动应用appsecret</label>
-							<div class="controls">				
-								<input type="text" name="post[wx_appsecret]" value="{$config['wx_appsecret']}">微信开放平台移动应用appsecret
-							</div>
-						</div>
-                        <div class="control-group">
-							<label class="control-label">微信商户号mchid</label>
-							<div class="controls">				
-								<input type="text" name="post[wx_mchid]" value="{$config['wx_mchid']}">微信商户号mchid（微信开放平台移动应用 对应的微信商户 商户号mchid）
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">微信密钥key</label>
-							<div class="controls">				
-								<input type="text" name="post[wx_key]" value="{$config['wx_key']}">微信密钥key（微信开放平台移动应用 对应的微信商户 密钥key）
-							</div>
-						</div>
-					</fieldset>
-				</div>
-                <!-- 提现配置 -->
-				<div>
-					<fieldset>
-						<div class="control-group">
-							<label class="control-label">提现比例</label>
-							<div class="controls">				
-								<input type="text" name="post[cash_rate]" value="{$config['cash_rate']}">提现一元人民币需要的票数
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">提现最低额度（元）</label>
-							<div class="controls">				
-								<input type="text" name="post[cash_min]" value="{$config['cash_min']}">
 							</div>
 						</div>
 

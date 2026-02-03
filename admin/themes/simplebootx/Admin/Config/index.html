@@ -33,7 +33,6 @@ input{
 
 		<ul class="nav nav-tabs js-tabs-nav">
 			<li><a>网站信息</a></li>
-			<li><a>登录开关</a></li>
 			<li><a>APP版本管理</a></li>
 			<li><a>分享设置</a></li>
 
@@ -146,51 +145,6 @@ input{
                         </div>
 						
 						
-					</fieldset>
-				</div>
-				<!-- 登录开关 -->
-				<div>
-					<fieldset>
-						<div class="control-group">
-							<label class="control-label">登录方式</label>
-							<div class="controls">		
-                                <php>
-									$qq='qq';
-									$wx='wx';
-									$sina='sina';
-									$facebook='facebook';
-									$twitter='twitter';
-								</php>
-								<label class="checkbox inline"><input type="checkbox" value="qq" name="post[login_type][]" <in value="$config['login_type']" name="qq">checked="checked"</in>>QQ</label>
-								<label class="checkbox inline"><input type="checkbox" value="wx" name="post[login_type][]" <in value="$config['login_type']" name="wx">checked="checked"</in>>微信</label>
-							<!-- 	<label class="checkbox inline"><input type="checkbox" value="sina" name="post[login_type][]" <in value="$config['login_type']" name="sina">checked="checked"</in>>新浪微博</label> -->
-								<!-- <label class="checkbox inline"><input type="checkbox" value="facebook" name="post[login_type][]" <in value="$config['login_type']" name="facebook">checked="checked"</in>>FaceBook</label>
-								<label class="checkbox inline"><input type="checkbox" value="twitter" name="post[login_type][]" <in value="$config['login_type']" name="twitter">checked="checked"</in>>Twitter</label> -->
-								<label class="checkbox inline">登录方式</label>
-							</div>
-						</div>
-						<div class="control-group">
-							<label class="control-label">分享方式</label>
-							<div class="controls">		
-                                <php>
-									$share_qq='qq';
-									$share_qzone='qzone';
-									$share_wx='wx';
-									$share_wchat='wchat';
-									$share_sina='sina';
-									$share_facebook='facebook';
-									$share_twitter='twitter';
-								</php>
-								<label class="checkbox inline"><input type="checkbox" value="wx" name="post[share_type][]" <in value="$config['share_type']" name="share_wx">checked="checked"</in>>微信</label>
-								<label class="checkbox inline"><input type="checkbox" value="wchat" name="post[share_type][]" <in value="$config['share_type']" name="share_wchat">checked="checked"</in>>微信朋友圈</label>
-								<label class="checkbox inline"><input type="checkbox" value="qzone" name="post[share_type][]" <in value="$config['share_type']" name="share_qzone">checked="checked"</in>>QQ空间</label>
-								<label class="checkbox inline"><input type="checkbox" value="qq" name="post[share_type][]" <in value="$config['share_type']" name="share_qq">checked="checked"</in>>QQ</label>
-							<!-- 	<label class="checkbox inline"><input type="checkbox" value="sina" name="post[share_type][]" <in value="$config['share_type']" name="share_sina">checked="checked"</in>>新浪微博</label> -->
-								<!-- <label class="checkbox inline"><input type="checkbox" value="twitter" name="post[share_type][]" <in value="$config['share_type']" name="share_twitter">checked="checked"</in>>Twitter</label>
-								<label class="checkbox inline"><input type="checkbox" value="facebook" name="post[share_type][]" <in value="$config['share_type']" name="share_facebook">checked="checked"</in>>FaceBook</label> -->
-								<label class="checkbox inline">分享方式</label>
-							</div>
-						</div>
 					</fieldset>
 				</div>
 				<!-- APP版本管理 -->
