@@ -222,7 +222,7 @@ a, button, input, img { -webkit-touch-callout: none; }
 input, select, textarea { outline: none; }
 
 html { font-size: 62.5%;	-ms-text-size-adjust: 100%;-webkit-text-size-adjust: 100% }
-body { font-size: 1.4rem; line-height: 1.5; background: #15102C; color: #323232; -webkit-user-select: none; -webkit-text-size-adjust: none!important; font-family: "Microsoft YaHei", Arial; }
+body { font-size: 1.4rem; line-height: 1.5; background: #000000; color: #323232; -webkit-user-select: none; -webkit-text-size-adjust: none!important; font-family: "Microsoft YaHei", Arial; }
 
 @media screen and (max-width: 350px) {
     html { font-size: 50%;}
@@ -315,17 +315,17 @@ img.levelanchor{
     vertical-align: sub;
 }
 .color_default{
-    color:#FF6131 !important;
+    color:#FF9000 !important;
 }
 .bg_default{
-    background-color:#FF6131 !important;
+    background-color:#FF9000 !important;
 }
 .button_default{
-    /* background: #FF6131 !important; */
-    background: -webkit-linear-gradient(left,#FF5623, #FF7D2F) !important;
-    background: -o-linear-gradient(left,#FF5623, #FF7D2F) !important;
-    background: -moz-linear-gradient(left,#FF5623, #FF7D2F) !important;
-    background: linear-gradient(to right,#FF5623, #FF7D2F) !important;
+    /* background: #FF9000 !important; */
+    background: -webkit-linear-gradient(left,#FF9000, #FFAA33) !important;
+    background: -o-linear-gradient(left,#FF9000, #FFAA33) !important;
+    background: -moz-linear-gradient(left,#FF9000, #FFAA33) !important;
+    background: linear-gradient(to right,#FF9000, #FFAA33) !important;
 }
 
 /* layer提示窗修改 */
@@ -375,7 +375,7 @@ img.levelanchor{
     background:none;
 }
 .layui-layer-btn a.layui-layer-btn1{
-    color:#FF6131;
+    color:#FF9000;
     border-left:1px solid #e5e5e5;
 }
 
@@ -386,7 +386,7 @@ img.levelanchor{
     padding-top:0;
 }
 .layui-layer-prompt .layui-layer-btn a.layui-layer-btn0{
-    color:#FF6131;
+    color:#FF9000;
 }
 .layui-layer-prompt .layui-layer-btn a.layui-layer-btn1{
     color:#646464;

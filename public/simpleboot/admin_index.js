@@ -103,7 +103,7 @@
                 barWidth: '60%',
                 data:data_type.nums_per,
                 color: function (params){
-                    var colorList = ['#ff8800', '#f85149', '#3fb950', '#58a6ff', '#a371f7', '#d29922'];
+                    var colorList = ['#FF9000', '#f85149', '#3fb950', '#58a6ff', '#a371f7', '#d29922'];
                     return colorList[params.dataIndex % colorList.length];
                 },
                 label: {
@@ -167,11 +167,11 @@
             type: 'line',
             smooth: true,
             lineStyle:{
-                color:'#ff8800',
+                color:'#FF9000',
                 width: 3
             },
             itemStyle: {
-                color: '#ff8800',
+                color: '#FF9000',
             },
             symbolSize:8,
             areaStyle: {
@@ -315,11 +315,11 @@
             symbol:'circle',
             symbolSize: 6,
             lineStyle:{
-                color:'#ff8800',
+                color:'#FF9000',
                 width: 3
             },
             itemStyle: {
-                color: '#ff8800',
+                color: '#FF9000',
             }
         },
         {

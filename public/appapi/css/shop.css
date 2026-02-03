@@ -126,7 +126,7 @@
 }
 .ready .ready_apply a.on{
     color:rgba(255,255,255,1);
-    background:#EA377F;
+    background:#FF9000;
 }
 
 .ready .ready_apply a.on:hover{
@@ -271,7 +271,7 @@
     text-align:center;
     color:#fff;
     font-size:0.3rem;
-    background:#EA377F;
+    background:#FF9000;
 }
 
 .apply .apply_no{

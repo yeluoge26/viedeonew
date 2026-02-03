@@ -6,12 +6,12 @@
 }
 
 :root {
-    --primary-color: #fe2c55;
+    --primary-color: #FF9000;
     --bg-color: #000;
     --text-color: #fff;
     --text-secondary: rgba(255,255,255,0.6);
-    --border-color: rgba(255,255,255,0.1);
-    --tab-active: #fe2c55;
+    --border-color: #333333;
+    --tab-active: #FF9000;
 }
 
 html, body {
@@ -164,7 +164,7 @@ ul, li {
     flex: none;
     width: 48px;
     height: 32px;
-    background: linear-gradient(135deg, #00f2ea, #fe2c55);
+    background: linear-gradient(135deg, #FF9000, #FFAA33);
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -784,7 +784,7 @@ ul, li {
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #fe2c55, #ff6b6b);
+    background: linear-gradient(135deg, #FF9000, #FFAA33);
     display: flex;
     align-items: center;
     justify-content: center;

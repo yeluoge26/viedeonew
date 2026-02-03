@@ -1,26 +1,26 @@
 /**
  * TECHSPACE Admin Theme
- * OnlyFans-inspired Orange & Dark Design
+ * Pornhub-inspired Orange & Black Design
  */
 
-/* ===== CSS Variables - Orange Theme ===== */
+/* ===== CSS Variables - Pornhub Orange Theme ===== */
 :root {
-    --bg-primary: #0d1117;
-    --bg-secondary: #161b22;
-    --bg-tertiary: #1c2128;
-    --bg-hover: #21262d;
-    --bg-active: #262c36;
-    --border-color: #30363d;
-    --border-light: #444c56;
+    --bg-primary: #000000;
+    --bg-secondary: #1b1b1b;
+    --bg-tertiary: #2d2d2d;
+    --bg-hover: #3a3a3a;
+    --bg-active: #444444;
+    --border-color: #333333;
+    --border-light: #444444;
     --text-primary: #ffffff;
-    --text-secondary: #8b949e;
-    --text-muted: #6e7681;
-    --accent-color: #ff8800;
-    --accent-hover: #ff9922;
-    --accent-light: rgba(255, 136, 0, 0.15);
-    --success-color: #3fb950;
-    --error-color: #f85149;
-    --warning-color: #d29922;
+    --text-secondary: #999999;
+    --text-muted: #666666;
+    --accent-color: #FF9000;
+    --accent-hover: #FFAA33;
+    --accent-light: rgba(255, 144, 0, 0.15);
+    --success-color: #00C853;
+    --error-color: #FF5252;
+    --warning-color: #FFD600;
     --info-color: #58a6ff;
 }
 
