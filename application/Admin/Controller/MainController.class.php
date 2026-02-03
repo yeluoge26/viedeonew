@@ -117,17 +117,20 @@ class MainController extends AdminbaseController {
             'value'=>[],
             'fans'=>[],
             'likes'=>[],
+            'newusers'=>[],
         );
         for($i=$time_7;$i<$today_start;){
             $end=$i+60*60*24;
             $videonums=$Video->where("isdel=0 and status=1 and is_ad=0 and addtime > {$i} and addtime <= {$end}")->count();
             $likes=$Video_Like->where("addtime > {$i} and addtime <= {$end}")->count();
             $fans=$Attention->where("addtime > {$i} and addtime <= {$end}")->count();
-            
+            $newusers=$User->where("user_type=2 and create_time > {$i} and create_time <= {$end}")->count();
+
             $data_week['date'][]=date("Y-m-d",$i);
             $data_week['value'][]=$videonums;
             $data_week['fans'][]=$fans;
             $data_week['likes'][]=$likes;
+            $data_week['newusers'][]=$newusers;
             $i=$end;
         }
         

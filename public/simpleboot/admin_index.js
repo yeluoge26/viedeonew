@@ -236,6 +236,31 @@
                     global: false
                 }
             }
+        },{
+            name:'新用户数',
+            data: data_week.newusers,
+            type: 'line',
+            smooth: true,
+            lineStyle:{
+                color:'#a371f7',
+                width: 3
+            },
+            itemStyle: {
+                color: '#a371f7',
+            },
+            symbolSize:8,
+            areaStyle: {
+                color: {
+                    type: 'linear',
+                    x: 0, y: 0, x2: 0, y2: 1,
+                    colorStops: [{
+                        offset: 0, color: 'rgba(163, 113, 247, 0.4)'
+                    }, {
+                        offset: 1, color: 'rgba(163, 113, 247, 0)'
+                    }],
+                    global: false
+                }
+            }
         }]
     };
     echarts_week.setOption(echarts_week_option);
