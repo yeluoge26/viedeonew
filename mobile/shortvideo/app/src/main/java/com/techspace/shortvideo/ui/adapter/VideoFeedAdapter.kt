@@ -25,7 +25,7 @@ class VideoFeedAdapter(
 ) : ListAdapter<VideoBean, VideoFeedAdapter.VideoViewHolder>(VideoDiffCallback()) {
 
     private val players = mutableMapOf<Int, ExoPlayer>()
-    private var currentPlayingPosition = -1
+    private var currentPlayingPosition = 0  // 默认从第一个视频开始播放
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VideoViewHolder {
         val view = LayoutInflater.from(parent.context)
@@ -144,16 +144,12 @@ class VideoFeedAdapter(
             player = ExoPlayer.Builder(itemView.context).build().apply {
                 repeatMode = Player.REPEAT_MODE_ONE
                 volume = 1f
+                playWhenReady = (position == currentPlayingPosition)  // 自动播放当前位置的视频
 
                 // Prepare video
                 val mediaItem = MediaItem.fromUri(videoUrl)
                 setMediaItem(mediaItem)
                 prepare()
-
-                // Auto play if this is the current position
-                if (position == currentPlayingPosition) {
-                    play()
-                }
             }
 
             playerView.player = player

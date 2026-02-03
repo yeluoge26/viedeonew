@@ -69,6 +69,7 @@ class FeedFragment : Fragment() {
 
         binding.viewPager.adapter = adapter
         binding.viewPager.orientation = ViewPager2.ORIENTATION_VERTICAL
+        binding.viewPager.offscreenPageLimit = 1  // 预加载相邻页面
 
         // 监听页面切换
         binding.viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
@@ -162,6 +163,13 @@ class FeedFragment : Fragment() {
                     if (hasMoreData) page++
 
                     binding.emptyView.visibility = if (videos.isEmpty()) View.VISIBLE else View.GONE
+
+                    // 首次加载时自动播放第一个视频
+                    if (page == 2 && videos.isNotEmpty()) {
+                        binding.viewPager.post {
+                            adapter.onPageSelected(0)
+                        }
+                    }
                 } else {
                     if (videos.isEmpty()) {
                         binding.emptyView.visibility = View.VISIBLE
