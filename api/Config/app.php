@@ -38,7 +38,7 @@ return array(
      */
     'UCloud' => array(
         //对应的文件路径
-        'host' => 'https://api.semonghuang.org/api/upload'
+        'host' => 'https://api.91huohu.com/api/upload'
     ),
 	/**
      * 腾讯云相关配置（改为了网站后台配置，此处废弃了）

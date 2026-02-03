@@ -1,4 +1,4 @@
-var site='https://api.semonghuang.org';
+var site='https://api.91huohu.com';
 var schedule = require("node-schedule");
 var request  = require('request');
 
